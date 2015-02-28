@@ -23,7 +23,23 @@ function buatSelect($val){
 						</div>
 					</div>
 					<div class="box-content">
-	<form class="form-horizontal" action="<?php echo "administrasi/simpan_pair_comparison" ?>" method="post"> 
+<!-- Pesan SUKSES-->
+<?php if( $this->session->flashdata('error') != "" ){ ?>
+						<div class="alert alert-warning alert-dismissible" role="alert">
+						  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						  <strong>Warning!</strong> <?php echo $this->session->flashdata('error'); ?>
+						</div>
+						<?php } 
+						if( $this->session->flashdata('success') != '' ){ ?>
+						<div class="alert alert-success alert-dismissible" role="alert">
+						  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						  <?php echo $this->session->flashdata('success') ?>
+						</div>
+						<?php }?>
+
+<!-- PESAN SUKSES -->
+
+	<form class="form-horizontal" action="<?php echo ($parent=='') ? "simpan_pair_comparison" : "simpan_pair_comparison/$parent" ?>" method="post"> 
 
 						<table class='table table-striped table-bordered'>
 
@@ -93,8 +109,10 @@ function buatSelect($val){
 								<?php foreach ($kriteria as $head) {
 									echo "<td style='text-align:center'>$head->nama_kriteria</td>";
 								}?>
-								<td style='text-align:center;background:#f4f4f4'>jumlah</td>
-								<td style='text-align:center;background:#d2ffa8'>prioritas</td>
+								<td style='text-align:center;'>Jumlah</td>
+								<td style='text-align:center;background:#d2ffa8'>Prioritas</td>
+								<td style='text-align:center;'>Hasil</td>
+								
 							</tr>
 						</thead>
 
@@ -106,18 +124,28 @@ function buatSelect($val){
 			     			echo "<td style='text-align:center'>$row->nama_kriteria</td>";
 			     			foreach ($kriteria as $col) {
 			     		
-			     				echo "<td style='text-align:center' id='matrik_".$row->id_kriteria."_".$col->id_kriteria."' class='matrik_".$row->id_kriteria."'>
+			     				echo "<td style='text-align:center' id='matrik_".$row->id_kriteria."_".$col->id_kriteria."' class='matrik_".$row->id_kriteria." matrik' data-kolom='".$col->id_kriteria."' data-baris='".$row->id_kriteria."'>
 			     				</td>";
 			     				
 			     			}
 			     			echo "<td style='text-align:center;background:#f4f4f4' id='jumlah_matrik_".$row->id_kriteria."'></td>";
-			     			echo "<td style='text-align:center;background:#d2ffa8'><input style='width:60px' type='number' id='prioritas_matrik_".$row->id_kriteria."' name='".$row->id_kriteria."' readonly/></td>";
+			     			echo "<td style='text-align:center;background:#d2ffa8'><input style='width:60px' type='number' id='prioritas_matrik_".$row->id_kriteria."' name='prioritas[]' readonly/></td>";
+			     			echo "<td style='text-align:center;background:#f4f4f4' id='hasil_matrik_".$row->id_kriteria."' class='hasil_matrik'></td>";
 			     			echo "</tr>";
 			     		}
 			     		?>
+			     		<tr><td colspan=<?php echo count($kriteria)+3; ?> style='text-align:center'>TOTAL HASIL</td><td style='text-align:center;' id='total_hasil_matrik' >aaa</td><tr>
 			     		</tbody>
 			     		</table>
-<center><input type='submit' class='btn btn-xlarge btn-warning' value='Simpan Tabel'></center> <br>
+<div class='container_cr'>
+CR = <span class='cr'>-1234</span> 
+</div><br>
+<div class='kesimpulan' style='font-size:15pt'>
+Maka, Rasio Konsistensi <span style='font-size:15pt' class=' label '>dapat diterima</span>
+</div>
+<hr>
+<br>			     		
+<center><input type='submit' class='btn btn-xlarge btn-warning btn-simpan' value='Simpan Tabel'></center> <br>
 
 			     	</form>
 					</div>

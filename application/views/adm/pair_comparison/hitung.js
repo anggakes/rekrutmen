@@ -1,15 +1,15 @@
 $(function(){
-	var kriteria = [
-		<?php 
-		$tampil ='';
-		foreach($kriteria as $k){
-			$tampil.="'$k->nama_kriteria', ";
-		}
-		$tampil = substr($tampil,0,-2);
-		echo $tampil
-		?>
-	];
 
+var ri = <?php echo $ri->nilai; ?>;
+var n = <?php echo count($kriteria); ?>;
+var baris = [<?php
+$baris=''; 
+foreach($kriteria as $k){
+	$baris.= "$k->id_kriteria, ";
+}
+$baris = substr($baris,0,-2);
+echo $baris;
+?>];
 /* 
 |	Fungsi untuk mengecek perubahan pada kolom 
 |	Jika ada perubahan maka jumlahkan lagi kolom
@@ -29,6 +29,8 @@ $(function(){
 		$('#'+kolom+"_"+baris).val(reverse($('#'+baris+"_"+kolom).val()));//42_43
 		
 		jumlah();
+		hitungHasil();
+		hitungCr();
 	});
 
 /* 
@@ -63,28 +65,85 @@ $(function(){
 		var sum= nilai_lama/jumlah_lama;
 		$('#matrik_'+baris+'_'+kolom).html(sum.toFixed(2));
 
-		hitung_jumlah_matrik(baris);
+		hitung_jumlah_matrik(baris,kolom);
 	}
 
-	function hitung_jumlah_matrik(baris){
+	function hitung_jumlah_matrik(baris,kolom){
 		var jumlah=0;
-		var n =0;
+
 		$('.matrik_'+baris).each(function(){
 			var nilai = $(this).html();
 			jumlah += parseFloat(nilai);
-			n++;
 		});
+
 		$("#jumlah_matrik_"+baris).html(jumlah.toFixed(2));
 
 		var prioritas = jumlah.toFixed(2)/n;
 		$("#prioritas_matrik_"+baris).val(prioritas.toFixed(2));
+
+}
+
+function hitungHasil(){
+	baris.forEach(function(entry){
+	var hasil =0;
+	$('.matrik_'+entry).each(function(){
+		var baris =$(this).data('baris');
+		var kolom=$(this).data('kolom'); 
+		var nilai = $(this).html();
+		var nilai_pb = parseFloat($('#'+baris+"_"+kolom).val());
+			var l = nilai*nilai_pb;
+			console.log("l "+baris+"-"+kolom+" :"+l);
+			console.log("nilai pb :"+nilai_pb);
+			hasil += parseFloat(l); 
+
+	});
+	console.log("hasil"+entry+":"+hasil);
+	var hm = parseFloat(hasil)+parseFloat($("#prioritas_matrik_"+entry).val());
+	$("#hasil_matrik_"+entry).html(hm.toFixed(4));
+	
+	});
+}
+
+ function hitungCr(){
+	var total =0;
+	$(".hasil_matrik").each(function(){
+		var nilai = $(this).html();
+		total += parseFloat(nilai);
+	});
+
+	$("#total_hasil_matrik").html(total.toFixed(2));
+
+	var cr = CI(total,n)/ri;
+
+	$('.cr').html(cr);
+	
+	$(".kesimpulan").find("span").removeClass('label-success');
+	$(".kesimpulan").find("span").removeClass('label-alert');
+
+	if(cr<0.1){
+		$(".kesimpulan").find("span").addClass('label-success').html("DAPAT DITERIMA");
+		$("input[type='submit']").removeAttr("disabled");
+	}else{
+		$(".kesimpulan").find("span").addClass('label-danger').html("TIDAK DAPAT DITERIMA");
+		$('input[type="submit"]').attr("disabled","disabled");
 	}
 
+}
+
+function lamda_max(jumlah,n){
+	var hasil = jumlah/n;
+	return hasil;
+}
+
+function CI(jumlah,n){
+	var hasil = (lamda_max(jumlah,n)-n)/n;
+	return hasil;
+}
 
 /* jumlahkan semua kriteria saat awal loading  */
 jumlah();
-	
 
-
+hitungHasil();
+hitungCr();
 
 });

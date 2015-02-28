@@ -129,10 +129,9 @@
 					<ul class="nav nav-tabs nav-stacked main-menu">
 						<li class="nav-header hidden-tablet">Main</li>
 						<li><a class="ajax-link" href="<?php echo site_url("administrasi/index") ?>"><i class="icon-home"></i><span class="hidden-tablet"> Beranda</span></a></li>
-						<li class="nav-header hidden-tablet">Dasar Keputusan</li>
-						<li><a class="ajax-link" href="<?php echo site_url("administrasi/kriteria") ?>"><i class="icon-eye-open"></i><span class="hidden-tablet"> Data Kriteria & Sub</span></a></li>
-						<li><a class="ajax-link" href="<?php echo site_url("administrasi/intensitas") ?>"><i class="icon-edit"></i><span class="hidden-tablet"> Data Intensitas</span></a></li>
-						<li><a class="ajax-link" href="<?php echo site_url("administrasi/pairwise_comparison") ?>"><i class="icon-align-justify"></i><span class="hidden-tablet">Pairwise Comparison </span></a></li>
+						<li class="nav-header hidden-tablet">Master AHP</li>
+						<li><a class="ajax-link" href="<?php echo site_url("administrasi/kriteria") ?>"><i class="icon-edit"></i><span class="hidden-tablet"> AHP </span></a></li>
+						<li><a class="ajax-link" href="<?php echo site_url("administrasi/intensitas") ?>"><i class="icon-eye-open"></i><span class="hidden-tablet"> Tabel Prioritas</span></a></li>
 						<li class="nav-header hidden-tablet">Peserta/Alternatif</li>
 						<li><a class="ajax-link" href="<?php echo site_url("administrasi/peserta") ?>"><i class="icon-edit"></i><span class="hidden-tablet"> Data Peserta</span></a></li>
 						<li><a class="ajax-link" href="<?php echo site_url("administrasi/penilaian") ?>"><i class="icon-edit"></i><span class="hidden-tablet"> Nilai Peserta</span></a></li>

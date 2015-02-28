@@ -259,10 +259,70 @@ class administrasi extends CI_Controller{
 		}
 
 		$data['kriteria'] = $this->db->query("SELECT * FROM kriteria WHERE $where")->result();
+		$data['parent']=$parent;
 		$data['perbandingan_berpasangan'] = $this->db->query("SELECT * FROM perbandingan_berpasangan WHERE $where ORDER BY baris,kolom")->result();
+		$data['ri'] = $this->db->query("SELECT * from table_ri where n='".count($data['kriteria'])."'")->row();
 		$data['output'] = $this->load->view('adm/pair_comparison/form',$data,true);
 		$data['skript']			= $this->load->view('adm/pair_comparison/hitung.js',$data,true);
 		$this->load->view('layout/layout_backend',$data);
+
+	}
+
+	public function simpan_pair_comparison(){
+
+		print_r($this->input->post());
+
+		$parent = $this->uri->segment(3);
+		$where ="parent_kriteria = '$parent'";
+
+		if($parent==''){
+			$parent=NULL;
+			$where="parent_kriteria is NULL";
+		}
+
+
+		$kriteria = $this->db->query("SELECT * FROM kriteria WHERE $where")->result();
+
+		$this->db->trans_start();  //start transaction
+
+		foreach ($this->input->post() as $key => $value) {
+			if($key=='prioritas'){
+				$prioritas=$value;
+			}else{
+				$data=[
+					'nilai'=>$value
+				];
+				$this->db->where('id',$key);
+				$this->db->update('perbandingan_berpasangan',$data);
+			}
+		}
+
+		for ($i=0;$i<count($kriteria);$i++) {
+			$nilai_prioritas[$i]=[
+				'id_kriteria'=>$kriteria[$i]->id_kriteria,
+				'nilai'=>$prioritas[$i],
+				'parent_kriteria'=>$parent
+			];
+		}
+
+		$this->db->query("DELETE FROM prioritas WHERE $where");//hapus dulu data di table prioritas
+		 
+		$this->db->insert_batch('prioritas',$nilai_prioritas);
+
+		$this->db->trans_complete();  //end transaction
+
+		if ($this->db->trans_status() === FALSE){
+				$messages = "Tabel gagal diubah.";
+				$this->session->set_flashdata('error',$messages);
+				redirect('administrasi/pair_comparison/'.$parent);	
+	
+			}else{
+				$messages = "Tabel berhasil disimpan.";
+				$this->session->set_flashdata('success',$messages);
+				redirect('administrasi/pair_comparison/'.$parent);				
+	
+			}
+
 
 	}
 

@@ -352,7 +352,28 @@ class administrasi extends CI_Controller{
 
 	public function lowongan_simpan(){
 
-		print_r($this->input->post());
+		//inisialisasi
+		$nama = $this->input->post('nama',true);
+		$deskripsi = $this->input->post('deskripsi',true);
+		$berakhir = $this->input->post('berakhir',true);
+		$kode_lowongan = $this->input->post('kode_lowongan',true);
+
+		$lowongan=[
+			'nama'=>$nama,
+			'deskripsi'=>$deskripsi,
+			'berakhir'=>$berakhir,
+			'kode_lowongan'=>$kode_lowongan
+		];
+
+		if($this->db->insert('lowongan',$lowongan)){
+			$messages = "Lowongan berhasil disimpan";
+			$this->session->set_flashdata('success',$messages);
+			redirect('administrasi/lowongan');				
+		}else{
+			$messages = "Lowongan gagal disimpan";
+			$this->session->set_flashdata('error',$messages);
+			redirect('administrasi/lowongan');
+		}
 	}
 	/* Form Lowongan --------------------------------*/
 

@@ -336,6 +336,7 @@ class administrasi extends CI_Controller{
 
 		$data['prioritas']	=	$this->db->query("SELECT kriteria.nama_kriteria as nama, prioritas.*,(Select count(id_kriteria) FROM kriteria WHERE kriteria.parent_kriteria=prioritas.id_kriteria) as banyak FROM prioritas,kriteria where prioritas.id_kriteria=kriteria.id_kriteria")->result();
 		$data['output'] 	= 	$this->load->view("adm/prioritas/prioritas",$data,true);
+
 		$this->load->view('layout/layout_backend',$data);
 	}
 
@@ -345,8 +346,12 @@ class administrasi extends CI_Controller{
 
 	public function lowongan(){
 
+		$this->load->library('parser');
+		
 		$data['lowongan']	=	$this->db->query("SELECT * FROM lowongan Order By id Desc")->result();
 		$data['output'] 	= 	$this->load->view("adm/lowongan/list",$data,true);
+		$data['skript']		=	$this->parser->parse('adm/lowongan/lowongan_script.js',array(),true);
+
 		$this->load->view('layout/layout_backend',$data);
 	}
 
@@ -416,6 +421,7 @@ class administrasi extends CI_Controller{
 		}
 	}
 	/* Form Lowongan --------------------------------*/
+
 
 	
 

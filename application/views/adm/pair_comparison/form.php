@@ -39,7 +39,7 @@ function buatSelect($val){
 
 <!-- PESAN SUKSES -->
 
-	<form class="form-horizontal" action="<?php echo ($parent=='') ? "simpan_pair_comparison" : "simpan_pair_comparison/$parent" ?>" method="post"> 
+	<form class="form-horizontal" action="<?php echo ($parent=='') ? site_url("administrasi/simpan_pair_comparison") : site_url("administrasi/simpan_pair_comparison/$parent") ?>" method="post"> 
 
 						<table class='table table-striped table-bordered'>
 

@@ -49,6 +49,9 @@
 	<link href='<?php echo base_url("backend_assets/css/jquery.iphone.toggle.css"); ?>' rel='stylesheet'>
 	<link href='<?php echo base_url("backend_assets/css/opa-icons.css"); ?>' rel='stylesheet'>
 	<link href='<?php echo base_url("backend_assets/css/uploadify.css"); ?>' rel='stylesheet'>
+	<link href='<?php echo base_url("backend_assets/datatables/jquery.dataTables.css"); ?>' rel='stylesheet'>
+
+		<script src="<?php echo base_url("backend_assets/js/jquery-1.7.2.min.js"); ?>"></script>
 
 	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
 	<!--[if lt IE 9]>
@@ -131,9 +134,9 @@
 						<li><a class="ajax-link" href="<?php echo site_url("administrasi/index") ?>"><i class="icon-home"></i><span class="hidden-tablet"> Beranda</span></a></li>
 						<li class="nav-header hidden-tablet">Master AHP</li>
 						<li><a class="ajax-link" href="<?php echo site_url("administrasi/kriteria") ?>"><i class="icon-edit"></i><span class="hidden-tablet"> AHP </span></a></li>
-						<li><a class="ajax-link" href="<?php echo site_url("administrasi/intensitas") ?>"><i class="icon-eye-open"></i><span class="hidden-tablet"> Tabel Prioritas</span></a></li>
-						<li class="nav-header hidden-tablet">Peserta/Alternatif</li>
-						<li><a class="ajax-link" href="<?php echo site_url("administrasi/peserta") ?>"><i class="icon-edit"></i><span class="hidden-tablet"> Data Peserta</span></a></li>
+						<li><a class="ajax-link" href="<?php echo site_url("administrasi/prioritas") ?>"><i class="icon-eye-open"></i><span class="hidden-tablet"> Tabel Prioritas</span></a></li>
+						<li class="nav-header hidden-tablet">Lowongan</li>
+						<li><a class="ajax-link" href="<?php echo site_url("administrasi/lowongan") ?>"><i class="icon-edit"></i><span class="hidden-tablet"> Data Lowongan</span></a></li>
 						<li><a class="ajax-link" href="<?php echo site_url("administrasi/penilaian") ?>"><i class="icon-edit"></i><span class="hidden-tablet"> Nilai Peserta</span></a></li>
 						
 						<li class="nav-header hidden-tablet">Analisa</li>
@@ -186,7 +189,7 @@
 	<!-- Placed at the end of the document so the pages load faster -->
 
 	<!-- jQuery -->
-	<script src="<?php echo base_url("backend_assets/js/jquery-1.7.2.min.js"); ?>"></script>
+
 	<!-- jQuery UI -->
 	<script src="<?php echo base_url("backend_assets/js/jquery-ui-1.8.21.custom.min.js"); ?>"></script>
 	<!-- transition / effect library -->
@@ -255,6 +258,24 @@
 	<!-- application script for Charisma demo -->
 	<script src="<?php echo base_url("backend_assets/js/charisma.js"); ?>"></script>
 
+	<!-- application script for Charisma demo -->
+	<script src="<?php echo base_url("backend_assets/datatables/jquery.dataTables.js"); ?>"></script>
+
+
+    <script type="text/javascript">
+		$.fn.modal.Constructor.prototype.enforceFocus = function() {
+		  modal_this = this
+		  $(document).on('focusin.modal', function (e) {
+		    if (modal_this.$element[0] !== e.target && !modal_this.$element.has(e.target).length 
+		    && !$(e.target.parentNode).hasClass('cke_dialog_ui_input_select') 
+		    && !$(e.target.parentNode).hasClass('cke_dialog_ui_input_text')) {
+		      modal_this.$element.focus()
+		    }
+		  })
+		};
+    </script>
+    
+
     <?php if( isset($js) ){ 
         foreach ($js as $key => $script) {
     ?>
@@ -268,6 +289,7 @@
     <?php echo $skript; ?>
     </script>
     <?php } ?>
+
 		
 </body>
 </html>

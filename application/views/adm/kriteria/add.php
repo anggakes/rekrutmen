@@ -28,15 +28,10 @@
 									 <select class="input-xlarge" name="parent_kriteria" >
 										<option value='' >- tidak sebagai subkriteria -</option>
 									 <?php 
-									 	foreach($parent_kriteria->result() as $p){
-									 		if($p->id_kriteria == $kriteria->parent_kriteria){
-
-									 			echo "<option value='$p->id_kriteria' selected=true>$p->nama_kriteria</option>";
-									 		}else{
-									 	
-									 			echo "<option value='$p->id_kriteria'>$p->nama_kriteria</option>";
-									 		}
-									 		
+									 	foreach($parent_kriteria as $p){
+									 		$selected = (isset($kriteria) and $kriteria->parent_kriteria==$p->id_kriteria) ? 'selected': '';
+									 	echo "<option value='$p->id_kriteria' $selected >$p->nama_kriteria</option>";
+																			
 									 	}
 									 ?>
 

@@ -43,7 +43,7 @@ class administrasi extends CI_Controller{
 	}
 
 	public function tambah_kriteria(){
-		$data['parent_kriteria'] = $this->db->query("SELECT * FROM kriteria where parent_kriteria is NULL");
+		$data['parent_kriteria'] = $this->db->query("SELECT * FROM kriteria where parent_kriteria is NULL")->result();
 		$data['output'] 	= 	$this->load->view("adm/kriteria/add",$data,true);
 		$this->load->view('layout/layout_backend',$data);		
 	}
@@ -53,9 +53,7 @@ class administrasi extends CI_Controller{
 		$id =$id->id_kriteria;
 
 		$data['kriteria']   = 	$this->db->query("SELECT * FROM kriteria where kode_kriteria = '$kode' or id_kriteria = '$kode' limit 1")->row();			
-		$data['parent_kriteria'] = $this->db->query("SELECT * FROM kriteria where parent_kriteria is NULL");
-		$data['intensitas']=	$this->db->query("SELECT * FROM intensitas where id_kriteria='$id'");
-
+		$data['parent_kriteria'] = $this->db->query("SELECT * FROM kriteria where parent_kriteria is NULL")->result();
 		$data['output'] 	= 	$this->load->view("adm/kriteria/add",$data,true);
 
 		$this->load->view('layout/layout_backend',$data);		
@@ -92,8 +90,12 @@ class administrasi extends CI_Controller{
 			$nama_kriteria = $this->input->post('nama_kriteria',true);
 			$keterangan    = $this->input->post('keterangan',true);
 			
+			$where ="parent_kriteria = '$parent_kriteria'";
+
+
 			if($parent_kriteria==''){
 				$parent_kriteria=NULL;
+				$where="parent_kriteria is NULL";
 			}
 
 
@@ -104,16 +106,20 @@ class administrasi extends CI_Controller{
 				'parent_kriteria'=>$parent_kriteria,
 				];
 			
+		
+			
 
-			$kriterias = $this->db->query("SELECT id_kriteria FROM kriteria")->result();
+			$kriterias = $this->db->query("SELECT id_kriteria FROM kriteria WHERE $where")->result();
 
 
 			$this->db->trans_start();  //start transaction
 			
 			$this->db->insert("kriteria",$kriteria);
 			
+			$i=0;
+
 			if(count($kriterias)>0){
-				$i=0;
+				
 				foreach ($kriterias as $k) {
 					$perbandingan_berpasangan[$i]=[
 						'baris'=>$this->db->insert_id(),
@@ -138,7 +144,8 @@ class administrasi extends CI_Controller{
 						'baris'=>$this->db->insert_id(),
 						'kolom'=>$this->db->insert_id(),
 						'nama'=>$this->db->insert_id()."_".$this->db->insert_id(),
-						'nilai'=>1
+						'nilai'=>1,
+						'parent_kriteria'=>$parent_kriteria
 				];
 
 			$this->db->insert_batch('perbandingan_berpasangan',$perbandingan_berpasangan);
@@ -270,8 +277,7 @@ class administrasi extends CI_Controller{
 
 	public function simpan_pair_comparison(){
 
-		print_r($this->input->post());
-
+	
 		$parent = $this->uri->segment(3);
 		$where ="parent_kriteria = '$parent'";
 
@@ -325,6 +331,30 @@ class administrasi extends CI_Controller{
 
 
 	}
+
+	public function prioritas(){
+
+		$data['prioritas']	=	$this->db->query("SELECT kriteria.nama_kriteria as nama, prioritas.*,(Select count(id_kriteria) FROM kriteria WHERE kriteria.parent_kriteria=prioritas.id_kriteria) as banyak FROM prioritas,kriteria where prioritas.id_kriteria=kriteria.id_kriteria")->result();
+		$data['output'] 	= 	$this->load->view("adm/prioritas/prioritas",$data,true);
+		$this->load->view('layout/layout_backend',$data);
+	}
+
+
+
+	/*  Form Lowongan --------------------------------*/
+
+	public function lowongan(){
+
+		$data['lowongan']	=	$this->db->query("SELECT * FROM lowongan Order By id Desc")->result();
+		$data['output'] 	= 	$this->load->view("adm/lowongan/list",$data,true);
+		$this->load->view('layout/layout_backend',$data);
+	}
+
+	public function lowongan_simpan(){
+
+		print_r($this->input->post());
+	}
+	/* Form Lowongan --------------------------------*/
 
 	
 

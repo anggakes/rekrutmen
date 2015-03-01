@@ -120,7 +120,7 @@ function hitungHasil(){
 	$(".kesimpulan").find("span").removeClass('label-success');
 	$(".kesimpulan").find("span").removeClass('label-alert');
 
-	if(cr<0.1){
+	if(cr<0.1 && isFinite(cr) ){
 		$(".kesimpulan").find("span").addClass('label-success').html("DAPAT DITERIMA");
 		$("input[type='submit']").removeAttr("disabled");
 	}else{

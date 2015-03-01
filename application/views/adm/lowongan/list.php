@@ -62,10 +62,11 @@ foreach ($lowongan as $l) {
 <!-- Modal Tambah -->
 
 <div class="modal hide fade" id="modal_tambah">
+<form class='form-horizontal' method='post' action="<?php echo site_url('administrasi/lowongan_simpan'); ?>">	
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">×</button>
 				<h3>Tambah Lowongan</h3>
-<form method='post' action="<?php echo site_url('administrasi/lowongan_simpan'); ?>">		
+	
 </div>
 			<div class="modal-body">
 
@@ -99,9 +100,10 @@ foreach ($lowongan as $l) {
 			<div class="modal-footer">
 				<input type='submit' class='btn btn-primary' value='simpan'>
 				<a href="#" class="btn" data-dismiss="modal">Tidak</a>
-</form>
+
 	
 			</div>
+			</form>
 		</div>
 
 <script type="text/javascript">

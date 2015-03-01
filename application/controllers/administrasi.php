@@ -375,6 +375,46 @@ class administrasi extends CI_Controller{
 			redirect('administrasi/lowongan');
 		}
 	}
+
+	public function lowongan_edit(){
+
+		$id= $this->input->post("id");
+		$lowongan=
+		[
+		"nama" => $this->input->post("nama"),
+		"berakhir" => $this->input->post("berakhir"),
+		"deskripsi" => $this->input->post("deskripsi"),
+		"kode_lowongan" => $this->input->post("kode_lowongan")
+		];
+
+		$this->db->where('id',$id);
+
+		if($this->db->update("lowongan",$lowongan)){
+			$messages = "Lowongan berhasil edit";
+			$this->session->set_flashdata('success',$messages);
+			redirect('administrasi/lowongan');				
+		}else{
+			$messages = "Lowongan gagal edit";
+			$this->session->set_flashdata('error',$messages);
+			redirect('administrasi/lowongan');
+		}
+
+	}
+
+	public function lowongan_hapus($id){
+		$this->db->where('id', $id);
+		
+		
+		if($this->db->delete('lowongan')){
+			$messages = "Lowongan berhasil dihapus";
+			$this->session->set_flashdata('success',$messages);
+			redirect('administrasi/lowongan');				
+		}else{
+			$messages = "Lowongan gagal dihapus";
+			$this->session->set_flashdata('error',$messages);
+			redirect('administrasi/lowongan');
+		}
+	}
 	/* Form Lowongan --------------------------------*/
 
 	

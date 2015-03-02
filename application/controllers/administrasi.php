@@ -336,6 +336,7 @@ class administrasi extends CI_Controller{
 
 		$data['prioritas']	=	$this->db->query("SELECT kriteria.nama_kriteria as nama, prioritas.*,(Select count(id_kriteria) FROM kriteria WHERE kriteria.parent_kriteria=prioritas.id_kriteria) as banyak FROM prioritas,kriteria where prioritas.id_kriteria=kriteria.id_kriteria")->result();
 		$data['output'] 	= 	$this->load->view("adm/prioritas/prioritas",$data,true);
+
 		$this->load->view('layout/layout_backend',$data);
 	}
 
@@ -345,8 +346,12 @@ class administrasi extends CI_Controller{
 
 	public function lowongan(){
 
+		$this->load->library('parser');
+		
 		$data['lowongan']	=	$this->db->query("SELECT * FROM lowongan Order By id Desc")->result();
 		$data['output'] 	= 	$this->load->view("adm/lowongan/list",$data,true);
+		$data['skript']		=	$this->parser->parse('adm/lowongan/lowongan_script.js',array(),true);
+
 		$this->load->view('layout/layout_backend',$data);
 	}
 
@@ -375,9 +380,48 @@ class administrasi extends CI_Controller{
 			redirect('administrasi/lowongan');
 		}
 	}
+
+	public function lowongan_edit(){
+
+		$id= $this->input->post("id");
+		$lowongan=
+		[
+		"nama" => $this->input->post("nama"),
+		"berakhir" => $this->input->post("berakhir"),
+		"deskripsi" => $this->input->post("deskripsi"),
+		"kode_lowongan" => $this->input->post("kode_lowongan")
+		];
+
+		$this->db->where('id',$id);
+
+		if($this->db->update("lowongan",$lowongan)){
+			$messages = "Lowongan berhasil edit";
+			$this->session->set_flashdata('success',$messages);
+			redirect('administrasi/lowongan');				
+		}else{
+			$messages = "Lowongan gagal edit";
+			$this->session->set_flashdata('error',$messages);
+			redirect('administrasi/lowongan');
+		}
+
+	}
+
+	public function lowongan_hapus($id){
+		$this->db->where('id', $id);
+		
+		
+		if($this->db->delete('lowongan')){
+			$messages = "Lowongan berhasil dihapus";
+			$this->session->set_flashdata('success',$messages);
+			redirect('administrasi/lowongan');				
+		}else{
+			$messages = "Lowongan gagal dihapus";
+			$this->session->set_flashdata('error',$messages);
+			redirect('administrasi/lowongan');
+		}
+	}
 	/* Form Lowongan --------------------------------*/
 	public function nilai(){
-
 		$data['peserta']	=	$this->db->query("SELECT * FROM peserta Order By no_peserta Desc")->result();
 		$data['output'] 	= 	$this->load->view("adm/lowongan/nilai",$data,true);
 		$this->load->view('layout/layout_backend',$data);

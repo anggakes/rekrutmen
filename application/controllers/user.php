@@ -362,6 +362,26 @@ class user extends CI_Controller{
 		$this->load->view('layout/layout_karir',$data);
 	}
 
+	public function apply_lowongan($id_lowongan){
+		$id_user = $this->session->userdata("nomor_peserta");
+		
+	//cek apakah pernah melamar
+		$cek = $this->db->query("SELECT Count(*) as sudah FROM peserta_lowongan WHERE no_peserta = '$id_user' AND id_lowongan = '$id_lowongan'")->row(); 
+		if($cek->sudah==0){
+			$apply = [
+				"no_peserta"=>$id_user,
+				"id_lowongan"=>$id_lowongan
+			];
+		if( $this->db->insert('peserta_lowongan', $apply) ) {
+				$this->session->set_flashdata('success',"Lowongan berhasil di apply");
+				redirect( site_url('user/lowongan') );
+			}
+		}
+
+		$this->session->set_flashdata('error',"terjadi error saat apply lamaran");
+		redirect( site_url('user/lowongan') );				
+		
+	}
 
 
 

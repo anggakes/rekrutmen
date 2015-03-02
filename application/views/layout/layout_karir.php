@@ -42,19 +42,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<?php echo site_url('karir') ?>" style="color:#fff;">
-                	PT. Telekomunikasi Indoesia
+                <a class="navbar-brand" href="<?php echo site_url() ?>" style="color:#fff;">
+                	PT. Telekomunikasi Indonesia
                 </a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="<?php echo site_url('karir') ?>">Home</a>
-                    </li>
-                    <li>
-                        <a href="#">Cara Mendaftar</a>
-                    </li>
+                     <?php if(check_karir_login()==true){ 
+                    echo "<li> <a href='#'>".$this->session->userdata('username_peserta')."</a></li>";
+                     } ?>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -68,18 +65,16 @@
     <header class="business-header">
     </header>
     <?php }else{ ?>
-    <div class="breadcrumb_gue">
-    	<div class="container">
-    		<h4 style="font-weight:bold;"><?php echo $sub_title; ?></h4>
-    	</div>
-    </div>
+    
     <?php } ?>
     <!-- Page Content -->
     <div class="container">
         <hr>
         <div class="row">
         <?php echo $output; ?>
-                    <div class="<?php echo ( $this->uri->segment(1) == "karir" && ( $this->uri->segment(2) == "" || $this->uri->segment(2) == "index" ) ) ? "col-sm-4" : "col-sm-2" ?>">
+        
+
+        <div class="<?php echo ( $this->uri->segment(1) == "karir" && ( $this->uri->segment(2) == "" || $this->uri->segment(2) == "index" ) ) ? "col-sm-4" : "col-sm-4" ?>">
 
                 <?php if( check_karir_login() == FALSE ){ ?>
                 <?php if( $this->session->flashdata('error') != "" ){ ?>
@@ -88,7 +83,15 @@
                       <strong>Warning!</strong> <?php echo $this->session->flashdata('error'); ?>
                     </div>
                 <?php } ?>
-                <div class="panel panel-default">
+            <?php if( $this->session->flashdata('success') != '' ){ ?>
+            <div class="alert alert-success alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <?php echo $this->session->flashdata('success') ?>
+            </div>
+            <?php }?>
+                <!-- Akhir login -->
+<div class='login'>
+<div class="panel panel-default">
                     <div class="panel-heading">
                         <h5>Login</h5>
                     </div>
@@ -105,18 +108,59 @@
                     </div>
                     <div class="panel-footer">
                         <div class="form-action">
-                                <input type="submit" class="btn btn-primary" value="login" />
-                                <a href="<?php echo site_url('karir/daftar') ?>">&nbsp;&nbsp;Daftar Sekarang</a>
+                                <input type="submit" class="btn btn-primary pull-right" value="login" />
+                                <a href="#" class='btn btn-link pull-right btn-daftar' >&nbsp;&nbsp;Daftar Sekarang</a>
                             </form>
                         </div>
-
+                        <div class='clearfix'></div>
                     </div>
                 </div>
+
+</div>                <!-- Akhir login -->
+
+<div class='pendaftaran' style='display:none'>                
+<div class="panel panel-default">
+        <div class="panel-heading">
+            <h5>Formulir Pendaftaran Akun</h5>
+        </div>
+        <div class="panel-body">
+            <form action="<?php echo site_url('karir/proses_daftar'); ?>" method="post" >
+                
+                <div class="form-group">
+                    <label for="email" >Email </label>
+                    
+                    <input class="form-control" type="text" name="email" value="<?php echo $this->session->flashdata('email'); ?>" />
+                    
+                </div>
+
+                <div class="form-group">
+                    <label for="password" >Password </label>
+                   
+                    <input class="form-control" type="password" name="password" />
+                    
+                </div>
+                <div class="form-group">
+                    <label for="password" >Konfirmasi Password </label>
+                    
+                    <input class="form-control" type="password" name="konfirmasi_password" />
+                   
+                </div>
+        </div>
+        <div class="panel-footer">
+            <div class="form-action">
+                <input type="submit" class="btn btn-primary pull-right" name="submit" value="Daftar"/>
+                <a href='#' class='btn btn-link btn-login pull-right' >login</a>
+                 </div>
+            <div class='clearfix'></div>
+        </div>
+    </div>
+</div><!-- AKhir pendaftaran-->
                 <?php }else { ?>
                         <div class="list-group">
                           <a href="<?php echo site_url('user/data_diri'); ?>" class="list-group-item <?php echo ( $this->uri->segment(2) == "data_diri" ? "active" : "" ) ?>">Data diri</a>
                           <a href="<?php echo site_url('user/data_pendidikan'); ?>" class="list-group-item <?php echo ( $this->uri->segment(2) == "data_pendidikan" ? "active" : "" ) ?>">Pendidikan</a>
                           <a href="<?php echo site_url("user/akun_anda") ?>" class="list-group-item <?php echo ( $this->uri->segment(2) == "akun_anda" ? "active" : "" ) ?>">Akun Anda</a>
+                          <a href="<?php echo site_url("user/lowongan") ?>" class="list-group-item <?php echo ( $this->uri->segment(2) == "lowongan" ? "active" : "" ) ?>">Lowongan Pekerjaan</a>
                           <a href="<?php echo site_url('login/keluar'); ?>" class="list-group-item">Logout</a>
                         </div>
                 <?php } ?>
@@ -155,6 +199,22 @@
     <?php echo $skript; ?>
     </script>
     <?php } ?>
+
+    <script type="text/javascript">
+        $('.btn-daftar').click(function(e){
+            e.preventDefault();
+            $('.login').hide();
+            $('.pendaftaran').slideDown();
+        });
+
+        $('.btn-login').click(function(e){
+            e.preventDefault();
+            $('.pendaftaran').hide();
+            $('.login').slideDown();
+        });
+
+
+    </script>
 </body>
 
 </html>

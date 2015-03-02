@@ -7,8 +7,12 @@ class karir extends CI_Controller{
 	}
 
 	public function index(){
+		if(!check_karir_login()){
 		$data['output'] = $this->load->view('karir/home',null,true);
 		$this->load->view('layout/layout_karir',$data);
+		}else{
+			redirect(site_url("user"));
+		}
 	}
 
 	public function daftar(){
@@ -22,11 +26,6 @@ class karir extends CI_Controller{
 		$this->load->library('form_validation');
 
 		$rules = array(
-               array(
-                     'field'   => 'nama', 
-                     'label'   => 'Nama', 
-                     'rules'   => 'required'
-                  ),
                array(
                      'field'   => 'email', 
                      'label'   => 'Email', 
@@ -49,11 +48,10 @@ class karir extends CI_Controller{
 
 		if( $this->form_validation->run() == FALSE ){
 			$this->session->set_flashdata('error',validation_errors());
-			redirect( site_url('karir/daftar') );
+			redirect( site_url('karir') );
 		}
 		else{
 
-			$nama 	= 	$this->input->post('nama',true);
 			$email 	=	$this->input->post('email',true);
 			$password = $this->input->post('password',true);
 			$konf_password = $this->input->post('konfirmasi_password',true); 
@@ -61,24 +59,22 @@ class karir extends CI_Controller{
 
 			if( strcmp($password, $konf_password) != 0 ){
 				//save it to session
-				$this->session->set_flashdata('nama',$nama);
 				$this->session->set_flashdata('email',$email);
 				$this->session->set_flashdata('error','Konfirmasi Password tidak benar');
-				redirect( site_url('karir/daftar') );
+				redirect( site_url('karir') );
 			}else{
 
 				$peserta = array(
-						'nama_peserta' 	=> $nama,
 						'email'			=> $email,
 						'password'		=> md5( $password )
 					);
 
 				if( $this->db->insert('peserta',$peserta) ) {
 					$this->session->set_flashdata('success','Pendaftaran telah berhasil, silakan login untuk melengkapi data diri <a href="'.site_url('karir').'">di sini</a>');
-					redirect( site_url('karir/daftar') );
+					redirect( site_url('karir') );
 				}else{
 					$this->session->set_flashdata('error','Konfirmasi Password tidak benar');
-					redirect( site_url('karir/daftar') );
+					redirect( site_url('karir') );
 				}
 
 			}

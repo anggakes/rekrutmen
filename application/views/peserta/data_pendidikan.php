@@ -1,4 +1,4 @@
-<div class="col-sm-10">
+<div class="col-sm-8">
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h5 class="panel-title">Data Pendidikan Terakhir</h5>
@@ -16,37 +16,59 @@
 			  <?php echo $this->session->flashdata('success') ?>
 			</div>
 			<?php }?>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Tingkat</th>
-						<th>Institusi</th>
-						<th>Jurusan</th>
-						<th>Tahun Masuk</th>
-						<th>Tahun Keluar</th>
-						<th>IPK</th>
-						<th>Aksi</th>
-					</tr>
-				</thead>
-				<tbody>
-				<form action="<?php echo site_url("user/update_data_pendidikan"); ?>" method="post">
-					<tr>
-						<td class="col-xs-2"><select name="tingkat" class="form-control">
-								<option value="D3">D3</option>
-								<option value="S1">S1</option>
-								<option value="S2">S2</option>
-							</select>
-						</td>
-						<td> <input type="text" class="form-control" name="nama_sekolah" value="<?php echo ( isset( $pendidikan->institusi ) ? $pendidikan->institusi : "" ) ?>" /> </td>
-						<td> <input type="text" class="form-control" name="jurusan" value="<?php echo ( isset( $pendidikan->jurusan ) ? $pendidikan->jurusan : "" ) ?>"/> </td>
-						<td> <input type="text" class="form-control" name="tahun_masuk" value="<?php echo ( isset( $pendidikan->tahun_masuk ) ? $pendidikan->tahun_masuk : "" ) ?>"/> </td>
-						<td> <input type="text" class="form-control" name="tahun_keluar" value="<?php echo ( isset( $pendidikan->tahun_ijazah ) ? $pendidikan->tahun_ijazah : "" ) ?>" /> </td>
-						<td class="col-xs-1"> <input type="text" class="form-control" name="ipk" value="<?php echo ( isset( $pendidikan->IPK ) ? $pendidikan->IPK : "" ) ?>" /> </td>
-						<td> <button type="submit" id="tambah" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span></button></td>
-					</tr>
+			<form class='form-horizontal' action="<?php echo site_url("user/update_data_pendidikan"); ?>" method="post">
+				<div class='form-group'>
+					<label class='control-label col-sm-2'>Tingkatan <span class="danger "></span></label>
+					<div class='col-sm-8'>
+					<select name="tingkat" class=" form-control">
+						<?php 
+							$tingkatan = ["D3","S1","S2"];
+
+							foreach ($tingkatan as $value) {
+								$selected=(isset( $pendidikan->pendidikan) and $pendidikan->pendidikan == $value ) ? "selected" : "";
+								echo "<option value='$value' $selected >$value</option>";
+							}
+						?>
+					</select>
+					</div>
+				</div>
+				<div class='form-group'>
+					<label class='control-label col-sm-2'>Institusi <span class="danger "></span></label>
+					<div class='col-sm-8'>
+					<input type="text" class="form-control" name="nama_sekolah" value="<?php echo ( isset( $pendidikan->institusi ) ? $pendidikan->institusi : "" ) ?>" />
+				</div>
+				</div>
+				<div class='form-group'>
+					<label class='control-label col-sm-2'>Jurusan <span class="danger "></span></label>
+					<div class='col-sm-8'>
+					<input type="text" class="form-control" name="jurusan" value="<?php echo ( isset( $pendidikan->jurusan ) ? $pendidikan->jurusan : "" ) ?>"/> 
+				</div>
+				</div>
+				<div class='form-group'>
+					<label class='control-label col-sm-2'>Tahun Masuk <span class="danger "></span></label>
+					<div class='col-sm-8'>
+					<input type="text" class="form-control" name="tahun_masuk" value="<?php echo ( isset( $pendidikan->tahun_masuk ) ? $pendidikan->tahun_masuk : "" ) ?>"/> 
+				</div>
+				</div>
+				<div class='form-group'>
+					<label class='control-label col-sm-2'>Tahun keluar <span class="danger "></span></label>
+					<div class='col-sm-8'>
+					<input type="text" class="form-control" name="tahun_keluar" value="<?php echo ( isset( $pendidikan->tahun_ijazah ) ? $pendidikan->tahun_ijazah : "" ) ?>" /> 
+				</div>
+				</div>
+				<div class='form-group'>
+					<label class='control-label col-sm-2'>Ipk <span class="danger "></span></label>
+					<div class='col-sm-8'>
+					<input type="text" class="form-control" name="ipk" value="<?php echo ( isset( $pendidikan->IPK ) ? $pendidikan->IPK : "" ) ?>" />
+				</div>
+				</div>
+		</div>
+		<div class="panel-footer">
+			<div class="form-action">
+				<input type="submit" name="submit" value="SIMPAN" class="pull-right btn btn-primary"/>
 				</form>
-				</tbody>
-			</table>
+				<div class='clearfix'></div>
+			</div>
 		</div>
 	</div>
 </div>

@@ -1,4 +1,4 @@
-<div class="col-sm-10">
+<div class="col-sm-8">
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h5 class="panel-title">Data Akun</h5>

@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "administrasi";
+$route['default_controller'] = "karir";
 $route['404_override'] = '';
 
 

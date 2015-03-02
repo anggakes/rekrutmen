@@ -1,7 +1,7 @@
-<div class="col-sm-12">
+<div class="col-sm-8">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h5 class="panel-title">Formulir Akun</h5>
+			<h5 class="panel-title">Formulir Pendaftaran Akun</h5>
 		</div>
 		<div class="panel-body">
 			<?php if( $this->session->flashdata('error') != "" ){ ?>
@@ -16,28 +16,33 @@
 			  <?php echo $this->session->flashdata('success') ?>
 			</div>
 			<?php }?>
-			<form action="<?php echo site_url('karir/proses_daftar'); ?>" method="post">
+			<form action="<?php echo site_url('karir/proses_daftar'); ?>" method="post" class='form-horizontal'>
+				
 				<div class="form-group">
-					<label for="email">Nama :</label>
-					<input class="form-control" type="text" name="nama" value="<?php echo $this->session->flashdata('nama'); ?>"/>
-				</div>
-				<div class="form-group">
-					<label for="email">Email :</label>
+					<label for="email" class='col-sm-2 control-label'>Email </label>
+					<div class='col-sm-5'>
 					<input class="form-control" type="text" name="email" value="<?php echo $this->session->flashdata('email'); ?>" />
+					</div>
 				</div>
+
 				<div class="form-group">
-					<label for="password">Password :</label>
+					<label for="password" class='col-sm-2 control-label'>Password </label>
+					<div class='col-sm-5' >
 					<input class="form-control" type="password" name="password" />
+					</div>
 				</div>
 				<div class="form-group">
-					<label for="password">Konfirmasi Password :</label>
+					<label for="password" class='col-sm-2 control-label'>Konfirmasi Password </label>
+					<div class='col-sm-5' >
 					<input class="form-control" type="password" name="konfirmasi_password" />
+					</div>
 				</div>
 		</div>
 		<div class="panel-footer">
 			<div class="form-action">
-				<input type="submit" class="btn btn-primary" name="submit" value="Daftar"/>
+				<input type="submit" class="btn btn-primary pull-right" name="submit" value="Daftar"/>
 			</div>
+			<div class='clearfix'></div>
 		</div>
 	</div>
 </div>

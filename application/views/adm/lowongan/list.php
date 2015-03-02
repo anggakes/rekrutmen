@@ -139,7 +139,7 @@ foreach ($lowongan as $l) {
 		<div class="controls">
 			<input class="" type="hidden" name="id" id="id_edit">
 	
-			<input class="" type="text" name="nama" value="" placeholder="Nama Lowongan" id='nama_edit' onClick="alert(this)">
+			<input class="" type="text" name="nama" value="" placeholder="Nama Lowongan" id='nama_edit' >
 		</div>
 	</div>
 	<div class="control-group">

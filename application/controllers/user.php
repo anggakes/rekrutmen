@@ -113,7 +113,8 @@ class user extends CI_Controller{
 				'jenis_kelamin' => $this->input->post('jenis_kelamin',true),
 				'status' => $this->input->post('status',true),
 				'agama' => $this->input->post('agama',true),
-				'alamat' => $this->input->post('warga_negara',true),
+				'warga_negara' => $this->input->post('warga_negara',true),
+				'alamat'=>$this->input->post('alamat',true),
 				'kode_pos' => $this->input->post('kode_pos',true),
 				'no_telp' => $this->input->post('no_telp',true),
 				'no_hp' => $this->input->post('no_hp',true),
@@ -352,6 +353,13 @@ class user extends CI_Controller{
 
         echo json_encode( $notification );
 
+	}
+
+	public function lowongan (){
+		$id_user = $this->session->userdata("nomor_peserta");
+		$data['lowongan'] = $this->db->query("SELECT lowongan.*, ( SELECT count(*) FROM peserta_lowongan where no_peserta='$id_user' AND id_lowongan = lowongan.id )as apply FROM lowongan where berakhir > NOW() ")->result();
+		$data['output'] = $this->load->view("peserta/lowongan",$data,true);
+		$this->load->view('layout/layout_karir',$data);
 	}
 
 

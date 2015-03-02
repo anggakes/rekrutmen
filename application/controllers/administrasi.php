@@ -421,9 +421,17 @@ class administrasi extends CI_Controller{
 		}
 	}
 	/* Form Lowongan --------------------------------*/
+	public function nilai(){
+		$data['peserta']	=	$this->db->query("SELECT * FROM peserta Order By no_peserta Desc")->result();
+		$data['output'] 	= 	$this->load->view("adm/lowongan/nilai",$data,true);
+		$this->load->view('layout/layout_backend',$data);
+	}
 
-
-	
+	public function tambah_nilai(){
+		$data['peserta'] = $this->db->query("SELECT * FROM peserta")->result();
+		$data['output'] 	= 	$this->load->view("adm/lowongan/tambah_nilai",$data,true);
+		$this->load->view('layout/layout_backend',$data);		
+	}
 
 	
 

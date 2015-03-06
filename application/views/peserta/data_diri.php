@@ -55,12 +55,12 @@
 				
 				
 				<div class="form-group">
-					<label>Tinggi Badan<span class="danger">*</span></label>
-					<input name="tinggi_badan" class="form-control" type="text" value="<?php echo $peserta->tinggi_badan; ?>" />
+					<label>Tinggi Badan<span class="danger">* </span></label><span class'label'> Maks:165cm</span>
+					<input name="tinggi_badan" class="form-control" type="number" value="<?php echo $peserta->tinggi_badan; ?>" max='165' /> 
 				</div>
 				<div class="form-group">
 					<label>Berat Badan<span class="danger">*</span></label>
-					<input name="berat_badan" class="form-control" type="text" value="<?php echo $peserta->berat_badan; ?>" />
+					<input name="berat_badan" class="form-control" type="number" value="<?php echo $peserta->berat_badan; ?>" />
 				</div>
 				
 		</div>

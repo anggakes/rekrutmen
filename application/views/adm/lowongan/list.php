@@ -18,7 +18,7 @@
 						<?php }?>
 <!-- Pesan Sukses -->
 					
- <a href="#" id='input_barang' class='btn btn-warning pull-right' data-toggle="modal" data-target="#modal_tambah"> Lowongan Baru </a>
+ <a href="#" id='input_barang' class='btn btn-info pull-right' data-toggle="modal" data-target="#modal_tambah"> Lowongan Baru </a>
 
                     <div class='clearfix'></div><br>
 
@@ -28,8 +28,8 @@
 							<td>Nama</td>
 							<td>Kode</td>
 							<td>Tanggal Berakhir</td>
-							<td>Hasil</td>
-							<td>Input Nilai</td>
+							<td>Hasil dan Alternatif</td>
+							
 							<td>Aksi</td>
 						</tr>
 						</thead>
@@ -41,22 +41,22 @@ foreach ($lowongan as $l) {
 		<td>".$l->nama."</td>
 		<td>".$l->kode_lowongan."</td>
 		<td>".$l->berakhir."</td>
-		<td></td>
-		<td></td>
+		<td><a href='".site_url("administrasi/nilai/$l->id")."' class='btn btn-success'>Lihat Hasil & Alternatif</a></td>
+		
 		<td>
-	<a class='btn btn-success edit' href='".site_url('administrasi/lihat_kriteria/'.$l->id)
+	<a class='edit' href='".site_url('administrasi/lihat_kriteria/'.$l->id)
 	."'
 	 data-toggle='modal' data-target='#modal_edit'
 	 data-nama='".$l->nama."' data-deskripsi='".$l->deskripsi."' data-berakhir='".$l->berakhir."' data-kode_lowongan ='".$l->kode_lowongan."' data-id='".$l->id."'
 
-	>
-	<i class='icon-zoom-in icon-white'></i>  
+	> 
+	
 		Edit                                           
-	</a>
-	<a class='btn btn-info' href='".site_url('administrasi/lowongan_hapus/'.$l->id)."'
+	</a> - 
+	<a class=' ' href='".site_url('administrasi/lowongan_hapus/'.$l->id)."'
 	onClick='return confirm(\" yakin dihapus ? \")'
 	>
-	<i class='icon-edit icon-white'></i>  
+	 
 										Hapus       
 	</a>
 

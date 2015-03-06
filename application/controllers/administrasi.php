@@ -6,6 +6,7 @@ class administrasi extends CI_Controller{
 		parent::__construct();
 		$method = $this->uri->segment(2);
 
+
 		if( strtolower( $method ) == "login" ){
 			if( check_adm_login() ){
 				redirect("administrasi/index");
@@ -421,19 +422,99 @@ class administrasi extends CI_Controller{
 		}
 	}
 	/* Form Lowongan --------------------------------*/
-	public function nilai(){
-		$data['peserta']	=	$this->db->query("SELECT * FROM peserta Order By no_peserta Desc")->result();
+	public function nilai($id_lowongan){
+		$data['id_lowongan']=$id_lowongan;
+		$data['peserta']	=	$this->db->query("SELECT peserta.nama_peserta, peserta.no_peserta, alternatif.nilai_ahp,peserta.tgl_lahir, alternatif.id FROM peserta,alternatif WHERE peserta.no_peserta = alternatif.no_peserta AND alternatif.id_lowongan = '".$id_lowongan."' ORDER BY nilai_ahp DESC")->result();
 		$data['output'] 	= 	$this->load->view("adm/lowongan/nilai",$data,true);
 		$this->load->view('layout/layout_backend',$data);
 	}
 
-	public function tambah_nilai(){
-		$data['peserta'] = $this->db->query("SELECT * FROM peserta")->result();
+	public function tambah_nilai($id_lowongan){
+		
+		$this->load->library('parser');
+
+		$alt = $this->db->query("SELECT no_peserta from alternatif WHERE id_lowongan = '".$id_lowongan."'")->result();
+		$pesertaAlt=array();
+		foreach ($alt as $value) {
+			array_push($pesertaAlt, $value->no_peserta);
+		}
+
+		$peserta=array();
+		$p = $this->db->query("SELECT peserta.nama_peserta, peserta.no_peserta, peserta.tgl_lahir FROM peserta,peserta_lowongan WHERE peserta.no_peserta = peserta_lowongan.no_peserta  AND peserta_lowongan.id_lowongan = '".$id_lowongan."'")->result();
+		foreach ($p as $pa) {
+			if(!in_array($pa->no_peserta, $pesertaAlt)){
+				array_push($peserta, $pa);
+			}
+		}
+
+		$data['id_lowongan']=	$id_lowongan;
+		$data['peserta'] 	= 	$peserta;
 		$data['output'] 	= 	$this->load->view("adm/lowongan/tambah_nilai",$data,true);
+		$data['skript']		=	$this->parser->parse('adm/lowongan/tambah_nilai_script.js',array(),true);
+
 		$this->load->view('layout/layout_backend',$data);		
 	}
 
-	
+	public function hitung_alt($id_lowongan){
+		$np = explode("-",$this->input->post('no_peserta'));
+		$no_peserta = trim($np[0]);
+		$nilai_psikotes = $this->input->post('psikotes');
+		$ketekunan = $this->input->post("ketekunan");
+
+		$data_wawancara = $this->input->post();
+		unset($data_wawancara['psikotes']);
+		unset($data_wawancara['no_peserta']);
+		unset($data_wawancara['ketekunan']);
+		
+		$this->load->library('Wawancara','','wawancara');
+		$this->load->library('Ipk','','ipk');
+		$this->load->library('Pendidikan','','pendidikan');
+		$this->load->library('IdentitasDiri','','identitasDiri');
+		$this->load->library('Psikotes','','psikotes');
+
+		$this->db->trans_start();
+		$data['k1'] 		= $this->ipk->make($no_peserta);
+		$data['k2'] 		= $this->pendidikan->make($no_peserta);
+		$data['k5'] 		= $this->wawancara->make($data_wawancara,$no_peserta,$id_lowongan);
+		$data['k4'] 		= $this->psikotes->make($nilai_psikotes,$no_peserta,$id_lowongan);
+		$data['k3'] 		= $this->identitasDiri->make($no_peserta,$ketekunan); 
+		$this->db->trans_complete();
+
+		
+		$this->load->library('Ahp','','ahp');
+		if($this->ahp->simpan($data,$id_lowongan,$no_peserta)){
+			$messages = "Alternatif berhasil disimpan";
+			$this->session->set_flashdata('success',$messages);
+			redirect('administrasi/nilai/'.$id_lowongan);				
+		}else{
+			$messages = "Terjadi kesalahan";
+			$this->session->set_flashdata('error',$messages);
+			redirect('administrasi/nilai/'.$id_lowongan);
+		}
+	}
+
+	public function alternatif_hapus($id,$id_lowongan){
+		 if($this->db->where("id",$id)->delete("alternatif")){
+			$messages = "Alternatif berhasil dihapus";
+			$this->session->set_flashdata('success',$messages);
+			redirect('administrasi/nilai/'.$id_lowongan);				
+		}else{
+			$messages = "Terjadi kesalahan";
+			$this->session->set_flashdata('error',$messages);
+			redirect('administrasi/nilai/'.$id_lowongan);
+		}
+	}
+
+	public function alternatif_edit($id,$id_lowongan){
+		$data['peserta']= $this->db->query("SELECT peserta.nama_peserta, peserta.no_peserta, alternatif.*,peserta.ketekunan,psikotes.nilai as psikotes, pendukung_wawancara.* FROM peserta,alternatif,psikotes,pendukung_wawancara Where alternatif.id='".$id."' AND peserta.no_peserta = alternatif.no_peserta and psikotes.no_peserta = alternatif.no_peserta AND pendukung_wawancara.no_peserta = alternatif.no_peserta AND pendukung_wawancara.id_lowongan = alternatif.id_lowongan")->row();
+
+		$data['id_lowongan']=	$id_lowongan;
+		
+		$data['output'] 	= 	$this->load->view("adm/lowongan/edit_nilai",$data,true);
+		$this->load->view('layout/layout_backend',$data);		
+
+	}
+
 
 
 }

@@ -61,7 +61,7 @@
 
     <!-- Image Background Page Header -->
     <!-- Note: The background image is set within the business-casual.css file. -->
-    <?php if( $this->uri->segment(1) == "karir" && ( $this->uri->segment(2) == "" || $this->uri->segment(2) == "index" ) ){ ?>
+    <?php if( !check_karir_login()==true){ ?>
     <header class="business-header">
     </header>
     <?php }else{ ?>

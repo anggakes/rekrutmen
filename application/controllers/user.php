@@ -195,7 +195,7 @@ class user extends CI_Controller{
 			$tahun_masuk 		= $this->input->post("tahun_masuk",true);
 			$tahun_ijazah		= $this->input->post("tahun_keluar",true);
 			$ipk 				= $this->input->post("ipk",true);
-			$lama_pendidikan 	= $tahun_ijazah - $tahun_masuk;
+			$lama_pendidikan 	= $this->input->post("lama_pendidikan",true);
 
 			$data = [
 				'nomor_peserta' 	=> $nomor_peserta,

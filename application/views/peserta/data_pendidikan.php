@@ -22,7 +22,7 @@
 					<div class='col-sm-8'>
 					<select name="tingkat" class=" form-control">
 						<?php 
-							$tingkatan = ["D3","S1","S2"];
+							$tingkatan = ["D3","S1","S2","S3"];
 
 							foreach ($tingkatan as $value) {
 								$selected=(isset( $pendidikan->pendidikan) and $pendidikan->pendidikan == $value ) ? "selected" : "";
@@ -60,6 +60,12 @@
 					<label class='control-label col-sm-2'>Ipk <span class="danger "></span></label>
 					<div class='col-sm-8'>
 					<input type="text" class="form-control" name="ipk" value="<?php echo ( isset( $pendidikan->IPK ) ? $pendidikan->IPK : "" ) ?>" />
+				</div>
+				</div>
+				<div class='form-group'>
+					<label class='control-label col-sm-2'>Lama Pendidikan <span class="danger "></span></label>
+					<div class='col-sm-8'>
+					<input type="number" step='any' class="form-control" name="lama_pendidikan" value="<?php echo ( isset( $pendidikan->lama_pendidikan ) ? $pendidikan->lama_pendidikan : "" ) ?>" />
 				</div>
 				</div>
 		</div>

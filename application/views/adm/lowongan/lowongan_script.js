@@ -17,4 +17,8 @@ $(document).ready(function(){
 		
 	});
 
+	$("input[name='berakhir']").datepicker({
+		dateFormat:"yy-mm-dd"
+	});
+
 });

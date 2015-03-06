@@ -3,8 +3,8 @@
 						
 					</div>
 					<div class="box-content">
-					<h2>Nilai <a href='<?php echo site_url('administrasi/tambah_nilai')?>' id='input_nilai' class='btn btn-info pull-right'> Input Nilai </a></h2><hr>
-<?php if( $this->session->flashdata('error') != "" ){ ?>
+					<h2>Tabel Alternatif dan Peringkat<a href='<?php echo site_url("administrasi/tambah_nilai/$id_lowongan")?>' id='input_nilai' class='btn btn-info pull-right'> Tambah Alternatif </a></h2><hr>
+					<?php if( $this->session->flashdata('error') != "" ){ ?>
 						<div class="alert alert-warning alert-dismissible" role="alert">
 						  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						  <strong>Warning!</strong> <?php echo $this->session->flashdata('error'); ?>
@@ -25,23 +25,30 @@
 					<table class='table table-bordered' id='datatables'>
 						<thead>
 						<tr>
+							<td>Peringkat</td>
+							<td>No Peserta</td>
 							<td>Nama</td>
-							<td>Kode</td>
 							<td>Tanggal Lahir</td>
+							<td>Nilai Ahp</td>
 							<td>Aksi</td>
 						</tr>
 						</thead>
 						<tbody>
 							<?php
+$i=1;
 foreach ($peserta as $l) {
 	echo "<tr>";
 	echo "
+		<td>".$i."</td>
 		<td>".$l->no_peserta."</td>
 		<td>".$l->nama_peserta."</td>
 		<td>".$l->tgl_lahir."</td>
-		<td><a href='#' id='hapus' class='btn btn-danger'><i class='icon icon-sign'></i> Hapus </a></td>
+		<td>".$l->nilai_ahp."</td>
+		<td><a href='".site_url("administrasi/alternatif_hapus/".$l->id."/".$id_lowongan)."' id='hapus' class=''> Hapus </a> - 
+		<a href='".site_url("administrasi/alternatif_edit/".$l->id."/".$id_lowongan)."' id='hapus' class=''> Edit </a></td>
 	"; 
 	echo "</tr>";
+	$i++;
 }
 
 
@@ -57,7 +64,7 @@ foreach ($peserta as $l) {
 
 <script type="text/javascript">
 $(document).ready(function(){
-	$('#datatables').DataTable();
+
 	
 
 });

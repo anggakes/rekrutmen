@@ -43,10 +43,7 @@
 								<td><?php echo $kriteria->keterangan; ?></td>
 								
 								<td class="center">
-									<a class="btn btn-success" href="<?php echo site_url('administrasi/lihat_kriteria/'.$kriteria->kode_kriteria) ?>">
-										<i class="icon-zoom-in icon-white"></i>  
-										View                                            
-									</a>
+									
 									<a class="btn btn-info" href="<?php echo site_url('administrasi/edit_kriteria/'.$kriteria->kode_kriteria) ?>">
 										<i class="icon-edit icon-white"></i>  
 										Edit                                            

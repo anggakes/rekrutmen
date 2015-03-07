@@ -20,7 +20,8 @@
 					
 
 						
-                    <div class='clearfix'></div><br>
+                    <div class='clearfix'></div>
+                    <a href='#' onClick="window.open('<?php echo site_url("administrasi/cetak_hasil/".$id_lowongan) ?>', '_blank');" class='btn btn-danger'><i class='icon-print icon-white'></i> cetak</a><br><br>
 
 					<table class='table table-bordered' id='datatables'>
 						<thead>

@@ -21,7 +21,9 @@ class user extends CI_Controller{
 
 	public function index(){
 		$this->load->model('peserta');
+		$id_user = $this->session->userdata("nomor_peserta");
 		$data['nama_peserta'] = $this->peserta->getUserData($this->session->userdata('username_peserta'))->nama_peserta;
+		$data['lowongan'] = $this->db->query("SELECT lowongan.*, ( SELECT count(*) FROM peserta_lowongan where no_peserta='$id_user' AND id_lowongan = lowongan.id )as apply FROM lowongan where berakhir > NOW() ")->result();
 		$data['sub_title'] 	= "Beranda";
 		$data['output'] = $this->load->view("peserta/home_peserta",$data,true);
 		$this->load->view('layout/layout_karir',$data);

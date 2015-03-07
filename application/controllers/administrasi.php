@@ -22,7 +22,17 @@ class administrasi extends CI_Controller{
 	}
 
 	public function index(){
-		$data['output'] = $this->load->view('adm/beranda',array(),true);
+		$data['pelamar']=$this->db->query("SELECT count(*) as total FROM peserta")->row();
+		$data['lowongan']=$this->db->query("SELECT count(*) as total FROM lowongan")->row();
+		
+		$data['output'] = $this->load->view('adm/beranda',$data,true);
+		
+		$breadcrumb=[
+			"home"=>site_url("administrasi/index"),
+			"dashboard"=>site_url("administrasi/index")
+		];
+		
+		$data['breadcrumb'] = breadcrumb($breadcrumb);
 		$this->load->view("layout/layout_backend",$data);
 	}
 
@@ -39,6 +49,11 @@ class administrasi extends CI_Controller{
 		$data['output'] 	= 	$this->load->view("adm/kriteria/list",$data,true);
 		$data['skript']		=	$this->parser->parse('scripts/script_criteria.js',array(),true);
 
+		$breadcrumb=[
+			"home"=>site_url("administrasi/index"),
+			"kriteria"=>site_url("administrasi/kriteria")
+		];
+		$data['breadcrumb'] = breadcrumb($breadcrumb);
 		$this->load->view('layout/layout_backend',$data);
 
 	}
@@ -46,6 +61,12 @@ class administrasi extends CI_Controller{
 	public function tambah_kriteria(){
 		$data['parent_kriteria'] = $this->db->query("SELECT * FROM kriteria where parent_kriteria is NULL")->result();
 		$data['output'] 	= 	$this->load->view("adm/kriteria/add",$data,true);
+		$breadcrumb=[
+			"home"=>site_url("administrasi/index"),
+			"kriteria"=>site_url("administrasi/kriteria"),
+			"tambah"=>site_url("administrasi/tambah_kriteria"),
+		];
+		$data['breadcrumb'] = breadcrumb($breadcrumb);
 		$this->load->view('layout/layout_backend',$data);		
 	}
 
@@ -56,6 +77,12 @@ class administrasi extends CI_Controller{
 		$data['kriteria']   = 	$this->db->query("SELECT * FROM kriteria where kode_kriteria = '$kode' or id_kriteria = '$kode' limit 1")->row();			
 		$data['parent_kriteria'] = $this->db->query("SELECT * FROM kriteria where parent_kriteria is NULL")->result();
 		$data['output'] 	= 	$this->load->view("adm/kriteria/add",$data,true);
+		$breadcrumb=[
+			"home"=>site_url("administrasi/index"),
+			"kriteria"=>site_url("administrasi/kriteria"),
+			"edit"=>site_url("administrasi/edit_kriteria"),
+		];
+		$data['breadcrumb'] = breadcrumb($breadcrumb);
 
 		$this->load->view('layout/layout_backend',$data);		
 	}
@@ -244,6 +271,13 @@ class administrasi extends CI_Controller{
 		$data['output'] 		= $this->load->view('adm/kriteria/view',$data,true);
 		$data['skript']			= $this->load->view('scripts/script_criteria.js',array(),true);
 
+		$breadcrumb=[
+			"home"=>site_url("administrasi/index"),
+			"kriteria"=>site_url("administrasi/kriteria"),
+			"lihat"=>site_url("administrasi/lihat_kriteria"),
+		];
+		$data['breadcrumb'] = breadcrumb($breadcrumb);
+
 		$this->load->view('layout/layout_backend',$data);
 
 	}
@@ -272,6 +306,13 @@ class administrasi extends CI_Controller{
 		$data['ri'] = $this->db->query("SELECT * from table_ri where n='".count($data['kriteria'])."'")->row();
 		$data['output'] = $this->load->view('adm/pair_comparison/form',$data,true);
 		$data['skript']			= $this->load->view('adm/pair_comparison/hitung.js',$data,true);
+		$breadcrumb=[
+			"home"=>site_url("administrasi/index"),
+			"kriteria"=>site_url("administrasi/kriteria"),
+			"Perbandingan berpasangan"=>site_url("administrasi/pair_comparison"),
+		];
+		$data['breadcrumb'] = breadcrumb($breadcrumb);
+
 		$this->load->view('layout/layout_backend',$data);
 
 	}
@@ -338,6 +379,12 @@ class administrasi extends CI_Controller{
 		$data['prioritas']	=	$this->db->query("SELECT kriteria.nama_kriteria as nama, prioritas.*,(Select count(id_kriteria) FROM kriteria WHERE kriteria.parent_kriteria=prioritas.id_kriteria) as banyak FROM prioritas,kriteria where prioritas.id_kriteria=kriteria.id_kriteria")->result();
 		$data['output'] 	= 	$this->load->view("adm/prioritas/prioritas",$data,true);
 
+		$breadcrumb=[
+			"home"=>site_url("administrasi/index"),
+			"prioritas"=>site_url("administrasi/prioritas"),
+			
+		];
+		$data['breadcrumb'] = breadcrumb($breadcrumb);
 		$this->load->view('layout/layout_backend',$data);
 	}
 
@@ -352,7 +399,11 @@ class administrasi extends CI_Controller{
 		$data['lowongan']	=	$this->db->query("SELECT * FROM lowongan Order By id Desc")->result();
 		$data['output'] 	= 	$this->load->view("adm/lowongan/list",$data,true);
 		$data['skript']		=	$this->parser->parse('adm/lowongan/lowongan_script.js',array(),true);
-
+		$breadcrumb=[
+			"home"=>site_url("administrasi/index"),
+			"lowongan"=>site_url("administrasi/lowongan"),
+		];
+		$data['breadcrumb'] = breadcrumb($breadcrumb);
 		$this->load->view('layout/layout_backend',$data);
 	}
 
@@ -426,6 +477,12 @@ class administrasi extends CI_Controller{
 		$data['id_lowongan']=$id_lowongan;
 		$data['peserta']	=	$this->db->query("SELECT peserta.nama_peserta, peserta.no_peserta, alternatif.nilai_ahp,peserta.tgl_lahir, alternatif.id FROM peserta,alternatif WHERE peserta.no_peserta = alternatif.no_peserta AND alternatif.id_lowongan = '".$id_lowongan."' ORDER BY nilai_ahp DESC")->result();
 		$data['output'] 	= 	$this->load->view("adm/lowongan/nilai",$data,true);
+		$breadcrumb=[
+			"home"=>site_url("administrasi/index"),
+			"lowongan"=>site_url("administrasi/lowongan"),
+			"alternatif dan hasil"=>site_url("administrasi/nilai"),
+		];
+		$data['breadcrumb'] = breadcrumb($breadcrumb);
 		$this->load->view('layout/layout_backend',$data);
 	}
 
@@ -451,7 +508,14 @@ class administrasi extends CI_Controller{
 		$data['peserta'] 	= 	$peserta;
 		$data['output'] 	= 	$this->load->view("adm/lowongan/tambah_nilai",$data,true);
 		$data['skript']		=	$this->parser->parse('adm/lowongan/tambah_nilai_script.js',array(),true);
+		$breadcrumb=[
+			"home"=>site_url("administrasi/index"),
+			"lowongan"=>site_url("administrasi/lowongan"),
+			"alternatif dan hasil"=>site_url("administrasi/nilai/".$id_lowongan),
+			"tambah alternatif"=>site_url("administrasi/tambah_nilai"),
 
+		];
+		$data['breadcrumb'] = breadcrumb($breadcrumb);
 		$this->load->view('layout/layout_backend',$data);		
 	}
 
@@ -511,8 +575,24 @@ class administrasi extends CI_Controller{
 		$data['id_lowongan']=	$id_lowongan;
 		
 		$data['output'] 	= 	$this->load->view("adm/lowongan/edit_nilai",$data,true);
+		$breadcrumb=[
+			"home"=>site_url("administrasi/index"),
+			"lowongan"=>site_url("administrasi/lowongan"),
+			"alternatif dan hasil"=>site_url("administrasi/nilai/".$id_lowongan),
+			"edit alternatif"=>site_url("administrasi/alternatif_edit"),
+
+		];
+		$data['breadcrumb'] = breadcrumb($breadcrumb);
 		$this->load->view('layout/layout_backend',$data);		
 
+	}
+
+	public function cetak_hasil ($id_lowongan){
+		$data['id_lowongan']=$id_lowongan;
+		$data['lowongan']=$this->db->query("SELECT * FROM lowongan where id = '".$id_lowongan."'")->row();
+		$data['peserta']	=	$this->db->query("SELECT peserta.nama_peserta, peserta.no_peserta, alternatif.nilai_ahp,peserta.tgl_lahir, alternatif.id FROM peserta,alternatif WHERE peserta.no_peserta = alternatif.no_peserta AND alternatif.id_lowongan = '".$id_lowongan."' ORDER BY nilai_ahp DESC")->result();
+		$this->load->view("adm/lowongan/cetak_hasil",$data);
+			
 	}
 
 

@@ -17,7 +17,7 @@
 			</div>
 			<?php }?>
 			<br>
-			<div class="alert alert-warning alert-dismissible" role="alert">
+			<div class="alert alert-info alert-dismissible" role="alert">
 			Untuk pengumuman tes dan kelulusan akan di informasikan lebih lanjut melalui <b>handphone</b> atau <b>email</b>
 			</div>
 			<br>

@@ -85,7 +85,7 @@
 				
 				<div class="top-nav nav-collapse pull-right">
 					<ul class="nav">
-						<li><a href="#">Logout</a></li>
+						<li><a href="<?php echo site_url("login_admin/keluar") ?>"><i class="icon-user icon-white"></i> Logout</a></li>
 						
 					</ul>
 				</div><!--/.nav-collapse -->
@@ -106,11 +106,11 @@
 						<li><a class="ajax-link" href="<?php echo site_url("administrasi/kriteria") ?>"><i class="icon-edit"></i><span class="hidden-tablet"> AHP </span></a></li>
 						<li><a class="ajax-link" href="<?php echo site_url("administrasi/prioritas") ?>"><i class="icon-eye-open"></i><span class="hidden-tablet"> Tabel Prioritas</span></a></li>
 						<li class="nav-header hidden-tablet">Lowongan</li>
-						<li><a class="ajax-link" href="<?php echo site_url("administrasi/lowongan") ?>"><i class="icon-edit"></i><span class="hidden-tablet"> Data Lowongan</span></a></li>
+						<li><a class="ajax-link" href="<?php echo site_url("administrasi/lowongan") ?>"><i class="icon-folder-open"></i><span class="hidden-tablet"> Data Lowongan</span></a></li>
 						
 						
 						<li class="nav-header hidden-tablet">Akun</li>
-						<li><a class="ajax-link" href="<?php echo site_url("administrasi/laporan") ?>"><i class="icon-align-justify"></i><span class="hidden-tablet"> Logout </span></a></li>
+						<li><a class="ajax-link" href="<?php echo site_url("login_admin/keluar") ?>"><i class="icon-user"></i><span class="hidden-tablet"> Logout </span></a></li>
 				</div><!--/.well -->
 			</div><!--/span-->
 			<!-- left menu ends -->
@@ -127,14 +127,7 @@
 			
 
 			<div>
-				<ul class="breadcrumb">
-					<li>
-						<a href="#">Home</a> <span class="divider">/</span>
-					</li>
-					<li>
-						<a href="#">Dashboard</a>
-					</li>
-				</ul>
+				<?php echo $breadcrumb?>
 			</div>
 			<div class="row-fluid">
 				<?php echo $output; ?>

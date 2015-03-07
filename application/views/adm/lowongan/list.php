@@ -29,7 +29,7 @@
 							<td>Kode</td>
 							<td>Tanggal Berakhir</td>
 							<td>Hasil dan Alternatif</td>
-							
+							<td>Pelamar</td>
 							<td>Aksi</td>
 						</tr>
 						</thead>
@@ -41,7 +41,8 @@ foreach ($lowongan as $l) {
 		<td>".$l->nama."</td>
 		<td>".$l->kode_lowongan."</td>
 		<td>".$l->berakhir."</td>
-		<td><a href='".site_url("administrasi/nilai/$l->id")."' class='btn btn-success'>Lihat Hasil & Alternatif</a></td>
+		<td><a href='".site_url("administrasi/nilai/$l->id")."' class='btn btn-danger'>Lihat Hasil & Alternatif</a></td>
+		<td><a href='".site_url("administrasi/pelamar/$l->id")."' class='btn btn-success'>Pelamar</a></td>
 		
 		<td>
 	<a class='edit' href='".site_url('administrasi/lihat_kriteria/'.$l->id)

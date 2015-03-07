@@ -595,6 +595,46 @@ class administrasi extends CI_Controller{
 			
 	}
 
+	public function pelamar($id_lowongan){
+		$data['id_lowongan']=$id_lowongan;
+		$data['peserta']	=	$this->db->query("SELECT peserta.nama_peserta,peserta.no_peserta,peserta.tgl_lahir FROM peserta,peserta_lowongan WHERE peserta_lowongan.id_lowongan = '".$id_lowongan."' AND peserta.no_peserta = peserta_lowongan.no_peserta")->result();
+		$data['output'] 	= 	$this->load->view("adm/lowongan/pelamar",$data,true);
+		$breadcrumb=[
+			"home"=>site_url("administrasi/index"),
+			"lowongan"=>site_url("administrasi/lowongan"),
+			"pelamar"=>site_url("administrasi/pelamar"),
+		];
+		$data['breadcrumb'] = breadcrumb($breadcrumb);
+		$this->load->view('layout/layout_backend',$data);
+	}
 
+	public function cetak_pelamar($id_lowongan){
+		$data['id_lowongan']=$id_lowongan;
+		$data['lowongan']=$this->db->query("SELECT * FROM lowongan where id = '".$id_lowongan."'")->row();
+	$data['peserta']	=	$this->db->query("SELECT peserta.nama_peserta,peserta.no_peserta,peserta.tgl_lahir FROM peserta,peserta_lowongan WHERE peserta_lowongan.id_lowongan = '".$id_lowongan."' AND peserta.no_peserta = peserta_lowongan.no_peserta")->result();
+	$this->load->view("adm/lowongan/cetak_pelamar",$data);
+		
+	}
+
+	public function detail_pelamar($no_peserta,$id_lowongan){
+		$data['id_lowongan']=$id_lowongan;
+		$data['peserta']	=	$this->db->query("SELECT peserta.*, pendidikan.* FROM peserta,pendidikan WHERE peserta.no_peserta = '".$no_peserta."' and pendidikan.no_peserta = peserta.no_peserta")->row();
+		$data['output'] 	= 	$this->load->view("adm/lowongan/detail_pelamar",$data,true);
+		$breadcrumb=[
+			"home"=>site_url("administrasi/index"),
+			"lowongan"=>site_url("administrasi/lowongan"),
+			"pelamar"=>site_url("administrasi/pelamar/".$id_lowongan),
+			"detail pelamar"=>"aa"
+		];
+		$data['breadcrumb'] = breadcrumb($breadcrumb);
+		$this->load->view('layout/layout_backend',$data);
+
+	}
+
+	public function cetak_detail_pelamar($no_peserta){
+	$data['peserta']	=	$this->db->query("SELECT peserta.*, pendidikan.* FROM peserta,pendidikan WHERE peserta.no_peserta = '".$no_peserta."' and pendidikan.no_peserta = peserta.no_peserta")->row();
+	$this->load->view("adm/lowongan/cetak_detail_pelamar",$data);
+		
+	}
 
 }

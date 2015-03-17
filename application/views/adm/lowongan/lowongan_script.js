@@ -13,6 +13,9 @@ $(document).ready(function(){
 		$("#modal_edit").find(".modal-body").find("#berakhir_edit").val($(this).data('berakhir'));
 
 		$("#modal_edit").find(".modal-body").find("#id_edit").val($(this).data('id'));
+		$("#modal_edit").find(".modal-body").find("#min_pendidikan").val($(this).data('min_pendidikan'));
+		$("#modal_edit").find(".modal-body").find("#min_usia").val($(this).data('min_usia'));
+		$("#modal_edit").find(".modal-body").find("#min_ipk").val($(this).data('min_ipk'));
 		
 		
 	});

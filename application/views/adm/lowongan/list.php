@@ -22,7 +22,7 @@
 
                     <div class='clearfix'></div><br>
 
-					<table class='table table-bordered' id='datatables'>
+					<table width='99%' class='table table-bordered' id='datatables'>
 						<thead>
 						<tr>
 							<td>Nama</td>
@@ -36,20 +36,23 @@
 						<tbody>
 							<?php
 foreach ($lowongan as $l) {
+	$a = new DateTime($l->berakhir);
+	$b= new DateTime(date("Y-m-d"));
+	$label = ($a<$b) ? "label-danger" : "label-success" ;
 	echo "<tr>";
 	echo "
 		<td>".$l->nama."</td>
 		<td>".$l->kode_lowongan."</td>
-		<td>".$l->berakhir."</td>
-		<td><a href='".site_url("administrasi/nilai/$l->id")."' class='btn btn-danger'>Lihat Hasil & Alternatif</a></td>
-		<td><a href='".site_url("administrasi/pelamar/$l->id")."' class='btn btn-success'>Pelamar</a></td>
+		<td><span class='label $label'>".ubah_tanggal($l->berakhir)."</span></td>
+		<td style='text-align:center'><a href='".site_url("administrasi/nilai/$l->id")."' class='btn btn-danger'>Hitung AHP</a></td>
+		<td> <a href='".site_url("administrasi/pelamar/$l->id")."' class=''>".$l->pelamar." Pelamar</a></td>
 		
 		<td>
 	<a class='edit' href='".site_url('administrasi/lihat_kriteria/'.$l->id)
 	."'
 	 data-toggle='modal' data-target='#modal_edit'
 	 data-nama='".$l->nama."' data-deskripsi='".$l->deskripsi."' data-berakhir='".$l->berakhir."' data-kode_lowongan ='".$l->kode_lowongan."' data-id='".$l->id."'
-
+	 data-min_usia='".$l->min_usia."' data-min_pendidikan='".$l->min_pendidikan."' data-min_ipk='".$l->min_ipk."'
 	> 
 	
 		Edit                                           
@@ -113,12 +116,33 @@ foreach ($lowongan as $l) {
 									<textarea class="" name="deskripsi" id="textarea2" rows="3"></textarea>
 								  </div>
 								</div>
-
+<div class="control-group">
+		<label class="control-label">Minimal Ipk </label>
+		<div class="controls">
+			<input class="" type="text" name="min_ipk" step='any' value="" placeholder="Minimal IPK">
+		</div>
+	</div>
+<div class="control-group">
+		<label class="control-label">Minimal Usia </label>
+		<div class="controls">
+			<input class="" type="text" name="min_usia" value="" placeholder="Minimal Usia">
+		</div>
+	</div>
+<div class="control-group">
+		<label class="control-label">Minimal Pendidikan </label>
+		<div class="controls">
+			<select name='min_pendidikan'>
+				<option value='D3'>D3</option>
+				<option value='S1'>S1</option>
+				<option value='S2'>S2</option>
+				<option value='S3'>S3</option>
+			</select>
+		</div>
+	</div>
 			</div>
 			<div class="modal-footer">
 				<input type='submit' class='btn btn-primary' value='simpan'>
 				<a href="#" class="btn" data-dismiss="modal">Tidak</a>
-
 	
 			</div>
 			</form>
@@ -163,6 +187,30 @@ foreach ($lowongan as $l) {
 									<textarea class="" name="deskripsi"  rows="3" id="deskripsi_edit"></textarea>
 								  </div>
 								</div>
+	<div class="control-group">
+		<label class="control-label">Minimal Ipk </label>
+		<div class="controls">
+			<input class="" type="number" name="min_ipk" step='any' value="" placeholder="Minimal IPK" id='min_ipk' >
+		</div>
+	</div>
+<div class="control-group">
+		<label class="control-label">Minimal Usia </label>
+		<div class="controls">
+			<input class="" type="number" step='any' name="min_usia" value="" placeholder="Minimal Usia" id='min_usia'>
+		</div>
+	</div>
+<div class="control-group">
+		<label class="control-label">Minimal Pendidikan </label>
+		<div class="controls">
+			<select name='min_pendidikan' id='min_pendidikan'>
+				<option value='D3'>D3</option>
+				<option value='S1'>S1</option>
+				<option value='S2'>S2</option>
+				<option value='S3'>S3</option>
+			</select>
+		</div>
+	</div>
+
 
 			</div>
 			<div class="modal-footer">

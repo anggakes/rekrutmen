@@ -25,13 +25,13 @@
 
 					<table class='table table-bordered' id='datatables'>
 						<thead>
-						<tr>
+						<tr style='background:#c0c0c0'>
 							<td>Peringkat</td>
 							<td>No Peserta</td>
 							<td>Nama</td>
 							<td>Tanggal Lahir</td>
 							<td>Nilai Ahp</td>
-							<td>Aksi</td>
+							<td style='text-align:center'>Aksi</td>
 						</tr>
 						</thead>
 						<tbody>
@@ -45,8 +45,10 @@ foreach ($peserta as $l) {
 		<td>".$l->nama_peserta."</td>
 		<td>".$l->tgl_lahir."</td>
 		<td>".$l->nilai_ahp."</td>
-		<td><a href='".site_url("administrasi/alternatif_hapus/".$l->id."/".$id_lowongan)."' id='hapus' class=''> Hapus </a> - 
-		<a href='".site_url("administrasi/alternatif_edit/".$l->id."/".$id_lowongan)."' id='hapus' class=''> Edit </a></td>
+		<td style='text-align:center'><a href='".site_url("administrasi/alternatif_hapus/".$l->id."/".$id_lowongan)."' id='hapus' class=''> Hapus </a> - 
+		<a href='".site_url("administrasi/alternatif_edit/".$l->id."/".$id_lowongan)."' id='hapus' class=''> Edit </a> - 
+		<a href='".site_url("administrasi/alternatif_detail/".$l->no_peserta."/".$id_lowongan)."' id='detail' class=''> Detail </a></td>
+
 	"; 
 	echo "</tr>";
 	$i++;

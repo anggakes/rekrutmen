@@ -15,6 +15,21 @@ if( !function_exists('check_karir_login') ){
 	}
 }
 
+if( !function_exists('check_role') ){
+	function check_role($role){
+
+		$_CI = &get_instance();
+
+		$r = $_CI->session->userdata('role'); 
+		if($r == $role){
+			return true;
+		}else{
+			return false;
+		}
+		
+	}
+}
+
 
 if( !function_exists('check_adm_login') ){
 
@@ -31,6 +46,33 @@ if( !function_exists('check_adm_login') ){
 	}
 
 }
+
+if( !function_exists('ubah_tanggal') ){
+
+	function ubah_tanggal($date){
+		$bulan = ["januari","februari","maret","april","mei","juni","juli","agustus","september","oktober","november","desember"];
+		$date=explode("-",$date);
+		return ($date[2]." ".$bulan[$date[1]-1]." ".$date[0]);
+	}
+
+}
+
+if( !function_exists('blink') ){
+
+	function blink($date){
+		$masuk = new DateTime($date);
+		$keluar = new DateTime(date("Y-m-d"));
+
+		$interval = $masuk->diff($keluar);
+		if($interval->d <= 3){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+}
+
 
 if( !function_exists('breadcrumb') ){
 

@@ -31,6 +31,7 @@ echo $baris;
 		jumlah();
 		hitungHasil();
 		hitungCr();
+
 	});
 
 /* 
@@ -46,6 +47,7 @@ echo $baris;
 			hitung_jumlah(kolom);
 			hitung_prioritas(baris,kolom);
 			
+		
 		});
 	}
 
@@ -95,10 +97,14 @@ function hitungHasil(){
 			console.log("l "+baris+"-"+kolom+" :"+l);
 			console.log("nilai pb :"+nilai_pb);
 			hasil += parseFloat(l); 
+			$("#psb_"+baris+"_"+kolom).html(l.toFixed(4));
 
 	});
 	console.log("hasil"+entry+":"+hasil);
 	var hm = parseFloat(hasil)+parseFloat($("#prioritas_matrik_"+entry).val());
+	$("#psb_prioritas_"+entry).val($("#prioritas_matrik_"+entry).val());
+
+	$("#jumlah_hasil_psb_"+entry).html(hasil.toFixed(4));
 	$("#hasil_matrik_"+entry).html(hm.toFixed(4));
 	
 	});
@@ -145,5 +151,11 @@ jumlah();
 
 hitungHasil();
 hitungCr();
+
+
+$('#form').bind('submit', function() {
+        $(this).find(':input').removeAttr('disabled');
+    });
+
 
 });

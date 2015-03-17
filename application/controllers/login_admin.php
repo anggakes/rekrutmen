@@ -45,6 +45,9 @@ class login_admin extends CI_Controller{
 				$user = $result->row();
 				$this->session->set_userdata('username',$username);
 				$this->session->set_userdata('password',$password);
+				$this->session->set_userdata('nama',$user->nama);
+				
+				$this->session->set_userdata('role',$user->role);
 				$this->session->set_userdata('user_id',$user->id_user);
 
 

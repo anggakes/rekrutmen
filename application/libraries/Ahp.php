@@ -44,7 +44,7 @@ Class Ahp{
 		return $this->ci->db->trans_status();
 	}
 
-	function getPrioritas(){
+	public function getPrioritas(){
 		$prioritas	=	$this->ci->db->query("SELECT kriteria.kode_kriteria as kode, prioritas.*,(Select count(id_kriteria) FROM kriteria WHERE kriteria.parent_kriteria=prioritas.id_kriteria) as banyak FROM prioritas,kriteria where prioritas.id_kriteria=kriteria.id_kriteria")->result();
 		$return ='';
 

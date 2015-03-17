@@ -16,6 +16,13 @@
 
     <!-- Custom CSS -->
     <link href="<?php echo base_url('assets/bower_components/css/business-frontpage.css') ?>" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="<?php echo base_url('assets/bower_components/jquery/dist/jquery.js'); ?>"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="<?php echo base_url('assets/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
+  
+
     <?php if( isset($css) ){ 
     foreach ($css as $key => $style) {
     ?>
@@ -51,6 +58,9 @@
                 <ul class="nav navbar-nav navbar-right">
                      <?php if(check_karir_login()==true){ 
                     echo "<li> <a href='#'>".$this->session->userdata('username_peserta')."</a></li>";
+                    echo "<li> <a href=".site_url("user/akun_anda")." style='margin-right:5px' class='' > Akun Anda</a></li>";
+                    echo "<li> <a href=".site_url('login/keluar')." style='margin-right:5px' class='' > Logout</a></li>";
+                    
                      } ?>
                 </ul>
             </div>
@@ -157,11 +167,11 @@
 </div><!-- AKhir pendaftaran-->
                 <?php }else { ?>
                         <div class="list-group">
+                          <a href="<?php echo site_url('user/'); ?>" class="list-group-item <?php echo ( $this->uri->segment(2) == "" ? "active" : "" ) ?>">Beranda</a>
                           <a href="<?php echo site_url('user/data_diri'); ?>" class="list-group-item <?php echo ( $this->uri->segment(2) == "data_diri" ? "active" : "" ) ?>">Data diri</a>
                           <a href="<?php echo site_url('user/data_pendidikan'); ?>" class="list-group-item <?php echo ( $this->uri->segment(2) == "data_pendidikan" ? "active" : "" ) ?>">Pendidikan</a>
-                          <a href="<?php echo site_url("user/akun_anda") ?>" class="list-group-item <?php echo ( $this->uri->segment(2) == "akun_anda" ? "active" : "" ) ?>">Akun Anda</a>
                           <a href="<?php echo site_url("user/lowongan") ?>" class="list-group-item <?php echo ( $this->uri->segment(2) == "lowongan" ? "active" : "" ) ?>">Lowongan Pekerjaan</a>
-                          <a href="<?php echo site_url('login/keluar'); ?>" class="list-group-item">Logout</a>
+                          
                         </div>
                 <?php } ?>
             </div>
@@ -181,11 +191,6 @@
     </div>
     <!-- /.container -->
 
-    <!-- jQuery -->
-    <script src="<?php echo base_url('assets/bower_components/jquery/dist/jquery.js'); ?>"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="<?php echo base_url('assets/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
     <?php if( isset($js) ){ 
         foreach ($js as $key => $script) {
     ?>

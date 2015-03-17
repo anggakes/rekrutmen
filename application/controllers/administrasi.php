@@ -18,13 +18,17 @@ class administrasi extends CI_Controller{
 			}
 		}
 
+		$page = $this->uri->segment(3);
+		
 
 	}
 
 	public function index(){
 		$data['pelamar']=$this->db->query("SELECT count(*) as total FROM peserta")->row();
 		$data['lowongan']=$this->db->query("SELECT count(*) as total FROM lowongan")->row();
-		
+		$data['l'] = $this->db->query("SELECT lowongan.*, ( SELECT count(*) FROM peserta_lowongan where id_lowongan = lowongan.id )as pelamar FROM lowongan where berakhir >= CURDATE() ")->result();
+
+
 		$data['output'] = $this->load->view('adm/beranda',$data,true);
 		
 		$breadcrumb=[
@@ -42,6 +46,7 @@ class administrasi extends CI_Controller{
 
 
 	public function kriteria(){
+		if(!check_role("staff")){redirect("administrasi/index");} //halaman staff
 
 		$this->load->library('parser');
 
@@ -59,6 +64,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function tambah_kriteria(){
+		if(!check_role("staff")){redirect("administrasi/index");} //halaman staff
+
 		$data['parent_kriteria'] = $this->db->query("SELECT * FROM kriteria where parent_kriteria is NULL")->result();
 		$data['output'] 	= 	$this->load->view("adm/kriteria/add",$data,true);
 		$breadcrumb=[
@@ -71,6 +78,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function edit_kriteria($kode){
+		if(!check_role("staff")){redirect("administrasi/index");} //halaman staff
+
 		$id = $this->db->query("SELECT id_kriteria FROM kriteria WHERE kode_kriteria='$kode' LIMIT 1")->row();
 		$id =$id->id_kriteria;
 
@@ -88,6 +97,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function simpan_kriteria( $sub=false ){
+		if(!check_role("staff")){redirect("administrasi/index");} //halaman staff
+
 
 		$this->load->library("form_validation");
 
@@ -197,6 +208,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function update_kriteria(){
+		if(!check_role("staff")){redirect("administrasi/index");} //halaman staff
+
 
 		$this->load->library("form_validation");
 
@@ -264,6 +277,8 @@ class administrasi extends CI_Controller{
 
 	}
 	public function lihat_kriteria($kode){
+		if(!check_role("staff")){redirect("administrasi/index");} //halaman staff
+
 
 
 		$data['kriteria'] 		= $this->db->query("select * from kriteria where kode_kriteria = '$kode' limit 1")->row();
@@ -283,6 +298,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function hapus_kriteria($kode){
+		if(!check_role("staff")){redirect("administrasi/index");} //halaman staff
+
 		
 		$this->db->where('kode_kriteria', $kode);
 		 
@@ -291,6 +308,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function pair_comparison(){
+		if(!check_role("staff")){redirect("administrasi/index");} //halaman staff
+
 
 		$parent = $this->uri->segment(3);
 		
@@ -302,6 +321,7 @@ class administrasi extends CI_Controller{
 
 		$data['kriteria'] = $this->db->query("SELECT * FROM kriteria WHERE $where")->result();
 		$data['parent']=$parent;
+		$data['keterangan_intensitas'] = $this->db->query("SELECT * FROM keterangan_intensitas")->result();
 		$data['perbandingan_berpasangan'] = $this->db->query("SELECT * FROM perbandingan_berpasangan WHERE $where ORDER BY baris,kolom")->result();
 		$data['ri'] = $this->db->query("SELECT * from table_ri where n='".count($data['kriteria'])."'")->row();
 		$data['output'] = $this->load->view('adm/pair_comparison/form',$data,true);
@@ -318,6 +338,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function simpan_pair_comparison(){
+		if(!check_role("staff")){redirect("administrasi/index");} //halaman staff
+
 
 	
 		$parent = $this->uri->segment(3);
@@ -375,6 +397,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function prioritas(){
+		if(!check_role("staff")){redirect("administrasi/index");} //halaman staff
+
 
 		$data['prioritas']	=	$this->db->query("SELECT kriteria.nama_kriteria as nama, prioritas.*,(Select count(id_kriteria) FROM kriteria WHERE kriteria.parent_kriteria=prioritas.id_kriteria) as banyak FROM prioritas,kriteria where prioritas.id_kriteria=kriteria.id_kriteria")->result();
 		$data['output'] 	= 	$this->load->view("adm/prioritas/prioritas",$data,true);
@@ -393,10 +417,12 @@ class administrasi extends CI_Controller{
 	/*  Form Lowongan --------------------------------*/
 
 	public function lowongan(){
+		if(!check_role("admin")){redirect("administrasi/index");} //halaman staff
+
 
 		$this->load->library('parser');
 		
-		$data['lowongan']	=	$this->db->query("SELECT * FROM lowongan Order By id Desc")->result();
+		$data['lowongan']	=	$this->db->query("SELECT lowongan.*,(SELECT count(*) FROM peserta_lowongan WHERE peserta_lowongan.id_lowongan = lowongan.id) as pelamar FROM lowongan Order By id Desc")->result();
 		$data['output'] 	= 	$this->load->view("adm/lowongan/list",$data,true);
 		$data['skript']		=	$this->parser->parse('adm/lowongan/lowongan_script.js',array(),true);
 		$breadcrumb=[
@@ -408,6 +434,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function lowongan_simpan(){
+		if(!check_role("admin")){redirect("administrasi/index");} //halaman staff
+
 
 		//inisialisasi
 		$nama = $this->input->post('nama',true);
@@ -415,11 +443,15 @@ class administrasi extends CI_Controller{
 		$berakhir = $this->input->post('berakhir',true);
 		$kode_lowongan = $this->input->post('kode_lowongan',true);
 
+
 		$lowongan=[
 			'nama'=>$nama,
 			'deskripsi'=>$deskripsi,
 			'berakhir'=>$berakhir,
-			'kode_lowongan'=>$kode_lowongan
+			'kode_lowongan'=>$kode_lowongan,
+			'min_usia'=>$this->input->post('min_usia',true),
+			'min_pendidikan'=>$this->input->post('min_pendidikan',true),
+			'min_ipk'=>$this->input->post('min_ipk',true)
 		];
 
 		if($this->db->insert('lowongan',$lowongan)){
@@ -434,6 +466,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function lowongan_edit(){
+		if(!check_role("admin")){redirect("administrasi/index");} //halaman staff
+
 
 		$id= $this->input->post("id");
 		$lowongan=
@@ -441,7 +475,10 @@ class administrasi extends CI_Controller{
 		"nama" => $this->input->post("nama"),
 		"berakhir" => $this->input->post("berakhir"),
 		"deskripsi" => $this->input->post("deskripsi"),
-		"kode_lowongan" => $this->input->post("kode_lowongan")
+		"kode_lowongan" => $this->input->post("kode_lowongan"),
+		'min_usia'=>$this->input->post('min_usia',true),
+			'min_pendidikan'=>$this->input->post('min_pendidikan',true),
+			'min_ipk'=>$this->input->post('min_ipk',true)
 		];
 
 		$this->db->where('id',$id);
@@ -459,6 +496,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function lowongan_hapus($id){
+		if(!check_role("admin")){redirect("administrasi/index");} //halaman staff
+
 		$this->db->where('id', $id);
 		
 		
@@ -474,6 +513,8 @@ class administrasi extends CI_Controller{
 	}
 	/* Form Lowongan --------------------------------*/
 	public function nilai($id_lowongan){
+		if(!check_role("admin")){redirect("administrasi/index");} //halaman staff
+
 		$data['id_lowongan']=$id_lowongan;
 		$data['peserta']	=	$this->db->query("SELECT peserta.nama_peserta, peserta.no_peserta, alternatif.nilai_ahp,peserta.tgl_lahir, alternatif.id FROM peserta,alternatif WHERE peserta.no_peserta = alternatif.no_peserta AND alternatif.id_lowongan = '".$id_lowongan."' ORDER BY nilai_ahp DESC")->result();
 		$data['output'] 	= 	$this->load->view("adm/lowongan/nilai",$data,true);
@@ -487,6 +528,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function tambah_nilai($id_lowongan){
+		if(!check_role("admin")){redirect("administrasi/index");} //halaman staff
+
 		
 		$this->load->library('parser');
 
@@ -520,6 +563,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function hitung_alt($id_lowongan){
+		if(!check_role("admin")){redirect("administrasi/index");} //halaman staff
+
 		$np = explode("-",$this->input->post('no_peserta'));
 		$no_peserta = trim($np[0]);
 		$nilai_psikotes = $this->input->post('psikotes');
@@ -558,6 +603,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function alternatif_hapus($id,$id_lowongan){
+		if(!check_role("admin")){redirect("administrasi/index");} //halaman staff
+
 		 if($this->db->where("id",$id)->delete("alternatif")){
 			$messages = "Alternatif berhasil dihapus";
 			$this->session->set_flashdata('success',$messages);
@@ -570,6 +617,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function alternatif_edit($id,$id_lowongan){
+		if(!check_role("admin")){redirect("administrasi/index");} //halaman staff
+
 		$data['peserta']= $this->db->query("SELECT peserta.nama_peserta, peserta.no_peserta, alternatif.*,peserta.ketekunan,psikotes.nilai as psikotes, pendukung_wawancara.* FROM peserta,alternatif,psikotes,pendukung_wawancara Where alternatif.id='".$id."' AND peserta.no_peserta = alternatif.no_peserta and psikotes.no_peserta = alternatif.no_peserta AND pendukung_wawancara.no_peserta = alternatif.no_peserta AND pendukung_wawancara.id_lowongan = alternatif.id_lowongan")->row();
 
 		$data['id_lowongan']=	$id_lowongan;
@@ -588,6 +637,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function cetak_hasil ($id_lowongan){
+		if(!check_role("admin")){redirect("administrasi/index");} //halaman staff
+
 		$data['id_lowongan']=$id_lowongan;
 		$data['lowongan']=$this->db->query("SELECT * FROM lowongan where id = '".$id_lowongan."'")->row();
 		$data['peserta']	=	$this->db->query("SELECT peserta.nama_peserta, peserta.no_peserta, alternatif.nilai_ahp,peserta.tgl_lahir, alternatif.id FROM peserta,alternatif WHERE peserta.no_peserta = alternatif.no_peserta AND alternatif.id_lowongan = '".$id_lowongan."' ORDER BY nilai_ahp DESC")->result();
@@ -596,6 +647,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function pelamar($id_lowongan){
+		if(!check_role("admin")){redirect("administrasi/index");} //halaman staff
+
 		$data['id_lowongan']=$id_lowongan;
 		$data['peserta']	=	$this->db->query("SELECT peserta.nama_peserta,peserta.no_peserta,peserta.tgl_lahir FROM peserta,peserta_lowongan WHERE peserta_lowongan.id_lowongan = '".$id_lowongan."' AND peserta.no_peserta = peserta_lowongan.no_peserta")->result();
 		$data['output'] 	= 	$this->load->view("adm/lowongan/pelamar",$data,true);
@@ -609,6 +662,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function cetak_pelamar($id_lowongan){
+		if(!check_role("admin")){redirect("administrasi/index");} //halaman staff
+
 		$data['id_lowongan']=$id_lowongan;
 		$data['lowongan']=$this->db->query("SELECT * FROM lowongan where id = '".$id_lowongan."'")->row();
 	$data['peserta']	=	$this->db->query("SELECT peserta.nama_peserta,peserta.no_peserta,peserta.tgl_lahir FROM peserta,peserta_lowongan WHERE peserta_lowongan.id_lowongan = '".$id_lowongan."' AND peserta.no_peserta = peserta_lowongan.no_peserta")->result();
@@ -617,6 +672,8 @@ class administrasi extends CI_Controller{
 	}
 
 	public function detail_pelamar($no_peserta,$id_lowongan){
+		if(!check_role("admin")){redirect("administrasi/index");} //halaman staff
+
 		$data['id_lowongan']=$id_lowongan;
 		$data['peserta']	=	$this->db->query("SELECT peserta.*, pendidikan.* FROM peserta,pendidikan WHERE peserta.no_peserta = '".$no_peserta."' and pendidikan.no_peserta = peserta.no_peserta")->row();
 		$data['output'] 	= 	$this->load->view("adm/lowongan/detail_pelamar",$data,true);
@@ -632,9 +689,32 @@ class administrasi extends CI_Controller{
 	}
 
 	public function cetak_detail_pelamar($no_peserta){
+	if(!check_role("admin")){redirect("administrasi/index");} //halaman staff
+
 	$data['peserta']	=	$this->db->query("SELECT peserta.*, pendidikan.* FROM peserta,pendidikan WHERE peserta.no_peserta = '".$no_peserta."' and pendidikan.no_peserta = peserta.no_peserta")->row();
 	$this->load->view("adm/lowongan/cetak_detail_pelamar",$data);
 		
+	}
+
+	public function alternatif_detail($no_peserta, $id_lowongan){
+		if(!check_role("admin")){redirect("administrasi/index");} //halaman staff
+
+		$data['peserta']	=	$this->db->query("SELECT peserta.*, pendidikan.*,(YEAR(CURDATE()) - YEAR(peserta.tgl_lahir)) as umur FROM peserta,pendidikan WHERE peserta.no_peserta = '".$no_peserta."' and pendidikan.no_peserta = peserta.no_peserta")->row();
+	
+		$this->load->library('Ahp','','ahp');
+		$data['prioritas'] = $this->ahp->getPrioritas();
+		$data['pw'] = $this->db->query("SELECT * FROM pendukung_wawancara WHERE no_peserta='".$no_peserta."' AND id_lowongan='".$id_lowongan."'")->row();
+		$data['psikotes'] = $this->db->query("SELECT * FROM psikotes WHERE no_peserta='".$no_peserta."' AND id_lowongan='".$id_lowongan."'")->row();
+		$data['alternatif'] = $this->db->query("SELECT * FROM alternatif WHERE no_peserta= '".$no_peserta."'")->row();
+		$data['output'] 	= 	$this->load->view("adm/lowongan/detail_alternatif",$data,true);
+		$breadcrumb=[
+			"home"=>site_url("administrasi/index"),
+			"lowongan"=>site_url("administrasi/lowongan"),
+			"alternatif dan hasil"=>site_url("administrasi/nilai/".$id_lowongan),
+			"detail alternatif"=>"aa"
+		];
+		$data['breadcrumb'] = breadcrumb($breadcrumb);
+		$this->load->view('layout/layout_backend',$data);
 	}
 
 }

@@ -22,8 +22,9 @@ class user extends CI_Controller{
 	public function index(){
 		$this->load->model('peserta');
 		$id_user = $this->session->userdata("nomor_peserta");
-		$data['nama_peserta'] = $this->peserta->getUserData($this->session->userdata('username_peserta'))->nama_peserta;
-		$data['lowongan'] = $this->db->query("SELECT lowongan.*, ( SELECT count(*) FROM peserta_lowongan where no_peserta='$id_user' AND id_lowongan = lowongan.id )as apply FROM lowongan where berakhir > NOW() ")->result();
+		$data['data_pendidikan'] = $this->peserta->getDataPendidikan( $id_user );
+		$data['peserta'] = $this->peserta->getUserDataByID($id_user);
+		$data['lowongan'] = $this->db->query("SELECT lowongan.*, ( SELECT count(*) FROM peserta_lowongan where no_peserta='$id_user' AND id_lowongan = lowongan.id )as apply FROM lowongan where berakhir >= CURDATE() ")->result();
 		$data['sub_title'] 	= "Beranda";
 		$data['output'] = $this->load->view("peserta/home_peserta",$data,true);
 		$this->load->view('layout/layout_karir',$data);
@@ -118,7 +119,8 @@ class user extends CI_Controller{
 				'warga_negara' => $this->input->post('warga_negara',true),
 				'alamat'=>$this->input->post('alamat',true),
 				'kode_pos' => $this->input->post('kode_pos',true),
-				'no_telp' => $this->input->post('no_telp',true),
+				'no_telp' => $this->input->post('no_telp',true),				
+				'area_telp' => $this->input->post('area_telp',true),
 				'no_hp' => $this->input->post('no_hp',true),
 				'tinggi_badan' => $this->input->post('tinggi_badan',true),
 				'berat_badan' => $this->input->post('berat_badan',true),
@@ -143,7 +145,9 @@ class user extends CI_Controller{
 
 		$nomor_peserta = $this->session->userdata( 'nomor_peserta' );
 		$dataPendidikan = $this->peserta->getDataPendidikan( $nomor_peserta );
-
+	
+		$data['css'] = $this->css;
+		$data['js'] = $this->js;
 		$data['output'] = $this->load->view('peserta/data_pendidikan',['pendidikan'=>$dataPendidikan,'sub_title'=>'Data Pendidikan Terakhir'],true);
 		$this->load->view('layout/layout_karir',$data);
 
@@ -167,12 +171,12 @@ class user extends CI_Controller{
 	         array(
 	              'field'   => 'tahun_masuk', 
 	              'label'   => 'Tahun Masuk', 
-	               'rules'   => 'required|numeric|min_length[4]'
+	               'rules'   => 'required'
 	        ),
 	         array(
 	              'field'   => 'tahun_keluar',
 	              'label'   => 'Tahun Keluar', 
-	              'rules'   => 'required|numeric|min_length[4]'
+	              'rules'   => 'required'
 	          ),
 	         array(
 	              'field'   => 'tingkat',
@@ -197,7 +201,8 @@ class user extends CI_Controller{
 			$tahun_masuk 		= $this->input->post("tahun_masuk",true);
 			$tahun_ijazah		= $this->input->post("tahun_keluar",true);
 			$ipk 				= $this->input->post("ipk",true);
-			$lama_pendidikan 	= $this->input->post("lama_pendidikan",true);
+			$this->load->library("LamaPendidikan","","LamaPendidikan");
+			$lama_pendidikan 	= $this->LamaPendidikan->make($tahun_masuk,$tahun_ijazah);
 
 			$data = [
 				'nomor_peserta' 	=> $nomor_peserta,
@@ -359,7 +364,10 @@ class user extends CI_Controller{
 
 	public function lowongan (){
 		$id_user = $this->session->userdata("nomor_peserta");
-		$data['lowongan'] = $this->db->query("SELECT lowongan.*, ( SELECT count(*) FROM peserta_lowongan where no_peserta='$id_user' AND id_lowongan = lowongan.id )as apply FROM lowongan where berakhir > NOW() ")->result();
+		$data['peserta'] = $this->peserta->getUserDataByID($id_user);
+		$data['pendidikan'] = $this->peserta->getDataPendidikan( $id_user );
+	
+		$data['lowongan'] = $this->db->query("SELECT lowongan.*, ( SELECT count(*) FROM peserta_lowongan where no_peserta='$id_user' AND id_lowongan = lowongan.id )as apply FROM lowongan where berakhir >= CURDATE() ")->result();
 		$data['output'] = $this->load->view("peserta/lowongan",$data,true);
 		$this->load->view('layout/layout_karir',$data);
 	}
@@ -367,9 +375,11 @@ class user extends CI_Controller{
 	public function apply_lowongan($id_lowongan){
 		$id_user = $this->session->userdata("nomor_peserta");
 		
+		$this->load->library("ApplyLowongan","","apply");
+		$oke = $this->apply->make($id_lowongan,$id_user);
 	//cek apakah pernah melamar
 		$cek = $this->db->query("SELECT Count(*) as sudah FROM peserta_lowongan WHERE no_peserta = '$id_user' AND id_lowongan = '$id_lowongan'")->row(); 
-		if($cek->sudah==0){
+		if($cek->sudah==0 AND $oke){
 			$apply = [
 				"no_peserta"=>$id_user,
 				"id_lowongan"=>$id_lowongan
@@ -380,7 +390,7 @@ class user extends CI_Controller{
 			}
 		}
 
-		$this->session->set_flashdata('error',"terjadi error saat apply lamaran");
+		$this->session->set_flashdata('error',"Anda Tidak dapat melamar Pekerjaan ini");
 		redirect( site_url('user/lowongan') );				
 		
 	}

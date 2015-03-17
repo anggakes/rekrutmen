@@ -80,7 +80,7 @@
 								</fieldset>
 
 								<fieldset>
-									<legend>3. Komunikasi </legend>
+									<legend>3. Dampak </legend>
 									<div class="control-group">
 										<label class="control-label">Berpakaian Sesuai Acara</label>
 										<div class="controls">

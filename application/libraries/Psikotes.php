@@ -22,7 +22,7 @@ class Psikotes{
 
 	public function setIntensitas($nilai){
 		$intensitas =1;
-		$int = $this->ci->db->query("SELECT intensitas FROM intensitas_ipk WHERE  nilai<='$nilai' ORDER BY intensitas desc")->row();
+		$int = $this->ci->db->query("SELECT intensitas FROM intensitas_psikotes WHERE  nilai<='$nilai' ORDER BY intensitas desc")->row();
 		if(isset($int->intensitas)){
 			$intensitas = $int->intensitas;
 		}

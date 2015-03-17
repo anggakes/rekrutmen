@@ -44,7 +44,7 @@
 								<div class="control-group">
 									<label class="control-label">Kode Kriteria</label>
 									<div class="controls">
-									  <input class="input-xlarge"  type="text" value="<?php echo (isset($kriteria) ? $kriteria->kode_kriteria : "") ?>" name="kode_kriteria" value="" placeholder="Kode Kriteria">
+									  <input class="input-xlarge" readonly  type="text" value="<?php echo (isset($kriteria) ? $kriteria->kode_kriteria : "") ?>" name="kode_kriteria" value="" placeholder="Kode Kriteria">
 									</div>
 								</div>
 								<?php if( isset($kriteria) ) { ?>

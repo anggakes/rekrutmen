@@ -85,6 +85,7 @@
 				
 				<div class="top-nav nav-collapse pull-right">
 					<ul class="nav">
+						<li><a href='#'>Sebagai : <?php echo $this->session->userdata('nama'); ?> </a></li>
 						<li><a href="<?php echo site_url("login_admin/keluar") ?>"><i class="icon-user icon-white"></i> Logout</a></li>
 						
 					</ul>
@@ -100,14 +101,18 @@
 			<div class="span2 main-menu-span">
 				<div class="well nav-collapse sidebar-nav">
 					<ul class="nav nav-tabs nav-stacked main-menu">
+
 						<li class="nav-header hidden-tablet">Main</li>
 						<li><a class="ajax-link" href="<?php echo site_url("administrasi/index") ?>"><i class="icon-home"></i><span class="hidden-tablet"> Beranda</span></a></li>
+						<?php 	if(check_role("staff")){ ?>
 						<li class="nav-header hidden-tablet">Master AHP</li>
 						<li><a class="ajax-link" href="<?php echo site_url("administrasi/kriteria") ?>"><i class="icon-edit"></i><span class="hidden-tablet"> AHP </span></a></li>
 						<li><a class="ajax-link" href="<?php echo site_url("administrasi/prioritas") ?>"><i class="icon-eye-open"></i><span class="hidden-tablet"> Tabel Prioritas</span></a></li>
+						<?php } ?>
+						<?php 	if(check_role("admin")){ ?>
 						<li class="nav-header hidden-tablet">Lowongan</li>
 						<li><a class="ajax-link" href="<?php echo site_url("administrasi/lowongan") ?>"><i class="icon-folder-open"></i><span class="hidden-tablet"> Data Lowongan</span></a></li>
-						
+						<?php } ?>
 						
 						<li class="nav-header hidden-tablet">Akun</li>
 						<li><a class="ajax-link" href="<?php echo site_url("login_admin/keluar") ?>"><i class="icon-user"></i><span class="hidden-tablet"> Logout </span></a></li>

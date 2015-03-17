@@ -38,7 +38,7 @@
 <tr><td style='font-weight:bold'>Jenis Kelamin</td><td>:</td><td>  <?php echo $peserta->jenis_kelamin?></td></tr>
 <tr><td style='font-weight:bold'>Agama</td><td>:</td><td>  <?php echo $peserta->agama?></td></tr>
 <tr><td style='font-weight:bold'>Alamat</td><td>: </td><td> <?php echo $peserta->alamat?></td></tr>
-<tr><td style='font-weight:bold'>Kontak</td><td>: </td><td> <?php echo $peserta->no_telp." / ".$peserta->no_hp?></td></tr>
+<tr><td style='font-weight:bold'>Kontak</td><td>: </td><td> <?php echo $peserta->area_telp.$peserta->no_telp." / +62".$peserta->no_hp?></td></tr>
 <tr><td style='font-weight:bold'>Warga Negara</td><td>: </td><td> <?php echo $peserta->warga_negara?></td></tr>
 <tr><td style='font-weight:bold'>Email</td><td>: </td><td> <?php echo $peserta->email?></td></tr>
 <tr><td style='font-weight:bold'>Tinggi Badan</td><td>: </td><td> <?php echo $peserta->tinggi_badan?> cm</td></tr>
